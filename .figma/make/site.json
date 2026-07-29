@@ -1,0 +1,14 @@
+{
+  "title": "TBH TELL ONE BRING ONE HELP ONE",
+  "description": "TBH TELL ONE BRING ONE HELP ONE website",
+  "language": "en",
+  "robots": {
+    "index": true
+  },
+  "icons": {
+    "icon": "/favicon.png"
+  },
+  "openGraph": {
+    "image": "/og-image.png"
+  }
+}
