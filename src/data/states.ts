@@ -1,0 +1,45 @@
+/** The 36 states and the Federal Capital Territory, with capitals, geopolitical zones and LGA counts (total 774). */
+export type State = { slug: string; name: string; capital: string; zone: "North Central" | "North East" | "North West" | "South East" | "South South" | "South West"; lgas: number };
+
+export const states: State[] = [
+  { slug: "abia", name: "Abia", capital: "Umuahia", zone: "South East", lgas: 17 },
+  { slug: "adamawa", name: "Adamawa", capital: "Yola", zone: "North East", lgas: 21 },
+  { slug: "akwa-ibom", name: "Akwa Ibom", capital: "Uyo", zone: "South South", lgas: 31 },
+  { slug: "anambra", name: "Anambra", capital: "Awka", zone: "South East", lgas: 21 },
+  { slug: "bauchi", name: "Bauchi", capital: "Bauchi", zone: "North East", lgas: 20 },
+  { slug: "bayelsa", name: "Bayelsa", capital: "Yenagoa", zone: "South South", lgas: 8 },
+  { slug: "benue", name: "Benue", capital: "Makurdi", zone: "North Central", lgas: 23 },
+  { slug: "borno", name: "Borno", capital: "Maiduguri", zone: "North East", lgas: 27 },
+  { slug: "cross-river", name: "Cross River", capital: "Calabar", zone: "South South", lgas: 18 },
+  { slug: "delta", name: "Delta", capital: "Asaba", zone: "South South", lgas: 25 },
+  { slug: "ebonyi", name: "Ebonyi", capital: "Abakaliki", zone: "South East", lgas: 13 },
+  { slug: "edo", name: "Edo", capital: "Benin City", zone: "South South", lgas: 18 },
+  { slug: "ekiti", name: "Ekiti", capital: "Ado-Ekiti", zone: "South West", lgas: 16 },
+  { slug: "enugu", name: "Enugu", capital: "Enugu", zone: "South East", lgas: 17 },
+  { slug: "fct", name: "FCT", capital: "Abuja", zone: "North Central", lgas: 6 },
+  { slug: "gombe", name: "Gombe", capital: "Gombe", zone: "North East", lgas: 11 },
+  { slug: "imo", name: "Imo", capital: "Owerri", zone: "South East", lgas: 27 },
+  { slug: "jigawa", name: "Jigawa", capital: "Dutse", zone: "North West", lgas: 27 },
+  { slug: "kaduna", name: "Kaduna", capital: "Kaduna", zone: "North West", lgas: 23 },
+  { slug: "kano", name: "Kano", capital: "Kano", zone: "North West", lgas: 44 },
+  { slug: "katsina", name: "Katsina", capital: "Katsina", zone: "North West", lgas: 34 },
+  { slug: "kebbi", name: "Kebbi", capital: "Birnin Kebbi", zone: "North West", lgas: 21 },
+  { slug: "kogi", name: "Kogi", capital: "Lokoja", zone: "North Central", lgas: 21 },
+  { slug: "kwara", name: "Kwara", capital: "Ilorin", zone: "North Central", lgas: 16 },
+  { slug: "lagos", name: "Lagos", capital: "Ikeja", zone: "South West", lgas: 20 },
+  { slug: "nasarawa", name: "Nasarawa", capital: "Lafia", zone: "North Central", lgas: 13 },
+  { slug: "niger", name: "Niger", capital: "Minna", zone: "North Central", lgas: 25 },
+  { slug: "ogun", name: "Ogun", capital: "Abeokuta", zone: "South West", lgas: 20 },
+  { slug: "ondo", name: "Ondo", capital: "Akure", zone: "South West", lgas: 18 },
+  { slug: "osun", name: "Osun", capital: "Osogbo", zone: "South West", lgas: 30 },
+  { slug: "oyo", name: "Oyo", capital: "Ibadan", zone: "South West", lgas: 33 },
+  { slug: "plateau", name: "Plateau", capital: "Jos", zone: "North Central", lgas: 17 },
+  { slug: "rivers", name: "Rivers", capital: "Port Harcourt", zone: "South South", lgas: 23 },
+  { slug: "sokoto", name: "Sokoto", capital: "Sokoto", zone: "North West", lgas: 23 },
+  { slug: "taraba", name: "Taraba", capital: "Jalingo", zone: "North East", lgas: 16 },
+  { slug: "yobe", name: "Yobe", capital: "Damaturu", zone: "North East", lgas: 17 },
+  { slug: "zamfara", name: "Zamfara", capital: "Gusau", zone: "North West", lgas: 14 },
+];
+
+export const stateBySlug = (s: string) => states.find((x) => x.slug === s);
+export const stateNames = states.map((s) => s.name);

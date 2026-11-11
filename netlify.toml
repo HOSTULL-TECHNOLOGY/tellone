@@ -1,0 +1,14 @@
+# Netlify: deploys the full Next.js app (pages, middleware, API routes) with Netlify's Next.js runtime.
+# Do NOT drag-and-drop this source folder onto Netlify Drop: Drop does not run a build, which is what
+# produces "Page not found". Deploy from Git or with the Netlify CLI (see README, "Deploy to Netlify").
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+  NEXT_PUBLIC_DEMO_MODE = "true"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
