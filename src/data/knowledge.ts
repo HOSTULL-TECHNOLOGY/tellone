@@ -81,7 +81,7 @@ export const knowledge: KnowledgeEntry[] = [
     keywords: ["ward leader", "street leader", "leader", "apply", "coordinator"],
     answer:
       "Ward leaders coordinate activity across one of Nigeria’s 8,809 wards; street leaders lead door-to-door outreach and distribution on their own street. Both can earn from verified work such as deliveries and distribution. Apply from the Ward Leaders or Street Leaders page.",
-    links: [{ label: "Ward Leaders", path: "/ward-leaders" }, { label: "Street Leaders", path: "/street-leaders" }],
+    links: [{ label: "Ward Leaders", path: "/careers/ward-leaders" }, { label: "Street Leaders", path: "/street-leaders" }],
   },
   {
     id: "giveaway",

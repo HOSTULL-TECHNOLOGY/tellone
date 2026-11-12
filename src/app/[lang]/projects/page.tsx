@@ -86,7 +86,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ lang:
             <Link href={L("/transparency")} className="btn btn-primary">
               Transparency report
             </Link>
-            <Link href={L("/ward-leaders")} className="btn btn-outline">
+            <Link href={L("/careers/ward-leaders")} className="btn btn-outline">
               Propose a project as a ward leader
             </Link>
           </>

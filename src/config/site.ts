@@ -18,20 +18,33 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   copyrightYear: 2026,
 
-  // Official channels — pending until supplied by the National Coordination team.
+  /** Public web address shown on the site, in SMS copy and on leader IDs (Careers Landing Page document). */
+  domain: "www.tbhone.com.ng",
+  // Official channels. WhatsApp, toll-free line and social handles from the Careers Landing Page: Ward Leaders
+  // (Wave 1) document; the digital lead registers each handle before launch (CAR-36). Email and address stay pending.
   contact: {
-    whatsappNumber: null as string | null, // E.164 without "+", e.g. "234..."
-    tollFree: null as string | null,
+    whatsappNumber: "2349045699268" as string | null, // E.164 without "+": 0904 569 9268
+    whatsappDisplay: "0904 569 9268",
+    tollFree: "0800 555 333 111" as string | null, // free, 24 hours
+    tollFreeTel: "0800555333111",
     email: null as string | null,
     pressEmail: null as string | null,
     address: null as string | null,
   },
+  /** Official accounts: the confirmed @tbhonenigeria handle on all 11 platforms (Careers document, Vision Points). */
+  handle: "@tbhonenigeria",
   social: {
-    x: null as string | null,
-    instagram: null as string | null,
-    facebook: null as string | null,
-    tiktok: null as string | null,
-    youtube: null as string | null,
+    instagram: "https://www.instagram.com/tbhonenigeria" as string | null,
+    facebook: "https://www.facebook.com/tbhonenigeria" as string | null,
+    x: "https://x.com/tbhonenigeria" as string | null,
+    tiktok: "https://www.tiktok.com/@tbhonenigeria" as string | null,
+    youtube: "https://www.youtube.com/@tbhonenigeria" as string | null,
+    threads: "https://www.threads.net/@tbhonenigeria" as string | null,
+    linkedin: "https://www.linkedin.com/company/tbhonenigeria" as string | null,
+    kingschat: "https://kingschat.online/user/tbhonenigeria" as string | null,
+    snapchat: "https://www.snapchat.com/add/tbhonenigeria" as string | null,
+    substack: "https://tbhonenigeria.substack.com" as string | null,
+    pinterest: "https://www.pinterest.com/tbhonenigeria" as string | null,
   },
   apps: {
     android: null as string | null,
@@ -66,3 +79,18 @@ export const campaignDates = {
  * honest empty states until live data exists.
  */
 export const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE !== "false";
+
+/** Display names for the official social platforms, in the order the Careers document lists them. */
+export const socialLabels: Record<keyof typeof site.social, string> = {
+  instagram: "Instagram",
+  facebook: "Facebook",
+  x: "X (Twitter)",
+  tiktok: "TikTok",
+  youtube: "YouTube",
+  threads: "Threads",
+  linkedin: "LinkedIn",
+  kingschat: "KingsChat",
+  snapchat: "Snapchat",
+  substack: "Substack",
+  pinterest: "Pinterest",
+};

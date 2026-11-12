@@ -41,7 +41,7 @@ export default async function EventsPage({ params }: { params: Promise<{ lang: s
           ]}
         />
         <p className="small muted">
-          Want to host one? <Link href={L("/ward-leaders")}>Become a ward leader</Link>.
+          Want to host one? <Link href={L("/careers/ward-leaders")}>Become a ward leader</Link>.
         </p>
       </Section>
     </>

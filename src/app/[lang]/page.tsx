@@ -6,6 +6,7 @@ import {
   Images, MapPin, Megaphone, Radio, Shield, ShieldAlert, Smartphone, Store, Tag, Ticket, Tv, Users, Wifi,
 } from "lucide-react";
 import "@/styles/home.css";
+import "@/styles/careers.css";
 import { getDict } from "@/i18n";
 import { href, isLocale, type Locale } from "@/lib/i18n";
 import { DEMO_MODE, site } from "@/config/site";
@@ -38,6 +39,8 @@ import { projects as fundableProjects, STATUS_LABEL } from "@/data/projects";
 import { PeopleMosaic } from "@/components/PeopleMosaic";
 import { peoplePhotos } from "@/data/photos";
 import { LiveBlock } from "@/components/home/LiveBlock";
+import { WardCounter } from "@/components/careers/Recruitment";
+import { headlines, WAVE } from "@/data/careers";
 import { ConnectForm } from "@/components/home/ConnectForm";
 import { AddToCartButton } from "@/components/ui/AddToCartButton";
 import { StoreBadges } from "@/components/ui/StoreBadges";
@@ -85,6 +88,27 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       {/* 1 — Hero */}
       <Hero t={t} locale={locale} joinHref={L("/join")} fundHref={L("/projects")} frameworkHref={L("/framework")} candidatesHref={L("/candidates")} />
+
+      {/* 1b — Ward leader recruitment band, shown until wave 1 closes (Careers document: "Where the page is promoted") */}
+      {Date.now() < Date.parse(`${WAVE.closes}T23:59:59+01:00`) && (
+        <section className="cw-homeband band-red" aria-labelledby="cw-band-h">
+          <div className="container cw-homeband-row">
+            <div>
+              <p className="cw-eyebrow cw-eyebrow-inv">TBH One Careers · Wave 1</p>
+              <h2 id="cw-band-h">{headlines.b}</h2>
+              <WardCounter variant="band" />
+            </div>
+            <div className="cw-homeband-ctas">
+              <Link href={L("/careers/ward-leaders#find-your-ward")} className="btn btn-lg cw-btn-primary">
+                Find your ward
+              </Link>
+              <Link href={L("/careers/ward-leaders/apply")} className="btn btn-lg btn-outline">
+                Register Free and Apply
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 2 — Theme song: the sticky player under the header on every page (components/chrome/StickyPlayer) */}
 
@@ -424,7 +448,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <BadgeCheck size={28} aria-hidden />
               <h3>{t.leaders.wardTitle}</h3>
               <p>{t.leaders.wardBody}</p>
-              <Link href={L("/ward-leaders")} className="btn btn-primary">
+              <Link href={L("/careers/ward-leaders")} className="btn btn-primary">
                 {t.leaders.wardCta}
               </Link>
             </article>

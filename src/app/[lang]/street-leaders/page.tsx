@@ -9,6 +9,8 @@ import { ApplyForm } from "@/components/participate/ApplyForm";
 import { stateNames } from "@/data/states";
 
 export const generateStaticParams = localeParams;
+/** Street leader recruitment opens to the public on Monday 23 November 2026 (Careers document); until then: waiting list. */
+const STREET_OPEN = Date.now() >= Date.parse("2026-11-23T00:00:00+01:00");
 export const generateMetadata = metaFor(
   "/street-leaders",
   "Become a TBH One street leader — role, earnings and how to apply",
@@ -63,7 +65,32 @@ export default async function StreetLeadersPage({ params }: { params: Promise<{ 
           Leaders also earn delivery fees for Shop orders handed over at pickup points, and Impact Points. Referral rewards are paid only for verified work, never for sign-ups alone.
         </p>
       </Section>
-      <Section title="Apply to be a street leader" intro="Applications are vetted before the role is added to your account. You must be a TBH One member.">
+      {!STREET_OPEN && (
+        <Section id="waitlist" title="Street leaders: join the waiting list" intro="Street leader places (440,450, one per street) open to the public on Monday 23 November 2026, once wave 1 ward leaders are trained. Register as a member and join the waiting list so you are first in line.">
+          <div className="split">
+            <ApplyForm
+              kind="street-leader-waitlist"
+              refPrefix="SLW"
+              submitLabel="Join the waiting list"
+              successTitle="You’re on the waiting list"
+              successText="You’re first in line: we’ll text you on Monday 23 November 2026 when street leader applications open. Your ward leader then reviews your application."
+              fields={[
+                { name: "name", label: "Full name", type: "text", required: true },
+                { name: "phone", label: "Mobile number", type: "tel", required: true },
+                { name: "state", label: "State", type: "select", options: stateNames, required: true },
+                { name: "street", label: "Your street", type: "text", required: true, hint: "You lead the street you live on." },
+              ]}
+            />
+            <div className="stack">
+              <p>Want to lead a whole ward instead? Wave 1 recruits one ward leader for each of the 8,809 wards.</p>
+              <Link href={L("/careers/ward-leaders")} className="btn btn-primary">
+                Become a ward leader
+              </Link>
+            </div>
+          </div>
+        </Section>
+      )}
+      <Section id={STREET_OPEN ? "waitlist" : "apply"} title="Apply to be a street leader" intro={STREET_OPEN ? "Applications are vetted before the role is added to your account. You must be a TBH One member." : "Applications open on Monday 23 November 2026. You can prepare now: applications are vetted before the role is added to your account, and you must be a TBH One member."}>
         <div className="split">
           <ApplyForm
             kind="street-leader"

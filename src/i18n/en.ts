@@ -325,6 +325,7 @@ const en = {
     fund: "Fund",
     shop: "Shop",
     giveaway: "Giveaway",
+    lead: "Lead Ward",
     talk: "Talk to Us",
   },
   support: {

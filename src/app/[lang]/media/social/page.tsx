@@ -6,7 +6,7 @@ import { href } from "@/lib/i18n";
 import { localeOf, metaFor } from "@/components/participate/pageKit";
 import { PageHeader, Section } from "@/components/ui/Page";
 import { CopyButton } from "@/components/ui/Interactive";
-import { site } from "@/config/site";
+import { site, socialLabels } from "@/config/site";
 import { SocialFeed } from "@/components/home/SocialFeed";
 
 export const generateStaticParams = localeParams;
@@ -16,13 +16,7 @@ export const generateMetadata = metaFor(
   "Follow TBH One's verified social accounts and use the official hashtags #WeWillNotStealYourMoney and #VotePeopleWhoWillNotStealYourMoney.",
 );
 
-const NETWORKS: [keyof typeof site.social, string][] = [
-  ["x", "X (Twitter)"],
-  ["instagram", "Instagram"],
-  ["facebook", "Facebook"],
-  ["tiktok", "TikTok"],
-  ["youtube", "YouTube"],
-];
+const NETWORKS = Object.entries(socialLabels) as [keyof typeof site.social, string][];
 
 export default async function SocialPage({ params }: { params: Promise<{ lang: string }> }) {
   const locale = await localeOf(params);

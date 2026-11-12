@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import "@/styles/content.css";
 import { href, isLocale, type Locale } from "@/lib/i18n";
 import { localeParams, pageMeta, site } from "@/lib/meta";
+import { socialLabels } from "@/config/site";
 import { CtaBand, Notice, PageHeader, PrototypeNote, Section } from "@/components/ui/Page";
 import { LeaderIdCheck } from "@/components/content/LeaderIdCheck";
 
@@ -18,16 +19,12 @@ export default async function VerifyPage({ params }: { params: Promise<{ lang: s
   const L = (p: string) => href(lang, p);
   const pending = <span className="chip">Pending — not yet published</span>;
   const channels: { label: string; value: string | null; link?: (v: string) => string }[] = [
-    { label: "Website", value: site.url.replace(/^https?:\/\//, ""), link: () => site.url },
-    { label: "WhatsApp number", value: site.contact.whatsappNumber ? `+${site.contact.whatsappNumber}` : null, link: (v) => `https://wa.me/${v.replace("+", "")}` },
-    { label: "Toll-free line", value: site.contact.tollFree, link: (v) => `tel:${v}` },
+    { label: "Website", value: site.domain, link: () => `https://${site.domain}` },
+    { label: "WhatsApp number", value: site.contact.whatsappNumber ? site.contact.whatsappDisplay : null, link: () => `https://wa.me/${site.contact.whatsappNumber}` },
+    { label: "Toll-free line (free, 24 hours)", value: site.contact.tollFree, link: () => `tel:${site.contact.tollFreeTel}` },
     { label: "Email", value: site.contact.email, link: (v) => `mailto:${v}` },
     { label: "Press email", value: site.contact.pressEmail, link: (v) => `mailto:${v}` },
-    { label: "X (Twitter)", value: site.social.x, link: (v) => v },
-    { label: "Instagram", value: site.social.instagram, link: (v) => v },
-    { label: "Facebook", value: site.social.facebook, link: (v) => v },
-    { label: "TikTok", value: site.social.tiktok, link: (v) => v },
-    { label: "YouTube", value: site.social.youtube, link: (v) => v },
+    ...(Object.keys(socialLabels) as (keyof typeof site.social)[]).map((k) => ({ label: socialLabels[k], value: site.social[k], link: (v: string) => v })),
     { label: "Android app", value: site.apps.android, link: (v) => v },
     { label: "iPhone app", value: site.apps.ios, link: (v) => v },
   ];

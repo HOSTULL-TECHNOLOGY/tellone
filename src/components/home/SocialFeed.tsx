@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { site } from "@/config/site";
 import { Heart, MessageCircle, Play, Repeat2 } from "lucide-react";
 
 /**
  * "From our official accounts": Instagram, X and TikTok feeds laid out the way each platform shows them.
- * The posts are SAMPLES made from the campaign's own posters, merch, photos and messages; the official handles are
- * not published yet, so none is invented here. At launch, replace with the platforms' embeds (or an API feed) for the
+ * The posts are SAMPLES made from the campaign's own posters, merch, photos and messages; the handle is the one
+ * given in the Ward Leaders brief (@tbhonenigeria). At launch, replace with the platforms' embeds (or an API feed) for the
  * verified accounts listed on the Verify page. Only posts from verified TBH One accounts may appear (PRD SOC-1).
  */
 function IgIcon() {
@@ -53,7 +54,7 @@ const TT = [
 ];
 
 export function SocialFeed({ verifyHref }: { verifyHref: string }) {
-  const handle = "Official handle listed at launch";
+  const handle = site.handle;
   return (
     <div className="sfeed">
       <section className="sfeed-col sfeed-ig" aria-label="Instagram">

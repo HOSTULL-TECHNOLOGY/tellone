@@ -298,7 +298,7 @@ export const answers: Answer[] = [
     answer:
       "Yes. Citizens submit proposed community projects with an estimated cost, usually through their ward leader. Proposals are reviewed and, where approved, published for funding. Delivered projects earn Impact Points for the people who complete them and are documented with proof of delivery.",
     detail: ["The aim is 7,500 executed projects across all 774 LGAs, delivered by citizens rather than designed centrally."],
-    links: [{ label: "Ward Leaders", path: "/ward-leaders" }, { label: "Fund a Project", path: "/projects" }],
+    links: [{ label: "Ward Leaders", path: "/careers/ward-leaders" }, { label: "Fund a Project", path: "/projects" }],
     sources: [CN],
     related: ["what-is-help-one", "how-does-project-funding-work"],
   },
@@ -353,7 +353,7 @@ export const answers: Answer[] = [
     answer:
       "Join TBH One, then apply for the ward leader role from the Ward Leaders page or your member dashboard. Ward leaders coordinate T-B-H activity, street leaders and community projects in one of Nigeria’s 8,809 wards, alongside the elected councillor. Roles are added after vetting and require two-factor sign-in.",
     detail: ["TBH One aims for 10,000 ward leaders, with more than one in larger wards."],
-    links: [{ label: "Ward Leaders", path: "/ward-leaders" }],
+    links: [{ label: "Ward Leaders", path: "/careers/ward-leaders" }],
     sources: [CN, PRDS],
     related: ["how-do-street-leaders-earn", "how-do-i-become-a-street-leader"],
   },

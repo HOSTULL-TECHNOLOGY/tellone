@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { WardLeaderStatus } from "@/components/careers/WardLeaderStatus";
+import "@/styles/careers.css";
 import { useEffect, useMemo, useState } from "react";
 import QRCode from "qrcode";
 import { CalendarDays, CheckCircle2, Circle, Download, Gift, HandCoins, MapPin, Phone, Printer, Users } from "lucide-react";
@@ -69,7 +71,12 @@ function MemberScreens({ section, user }: { section: string; user: DemoUser }) {
     case "id-card":
       return <IdCard user={user} />;
     case "apply":
-      return <Apply user={user} />;
+      return (
+        <>
+          <WardLeaderStatus user={user} applyHref="/careers/ward-leaders/apply" boostHref="/careers/ward-leaders#boost" trainingHref="/training/leader" />
+          <Apply user={user} />
+        </>
+      );
     case "settings":
       return <Settings user={user} />;
     default:

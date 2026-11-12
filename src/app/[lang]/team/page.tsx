@@ -84,7 +84,7 @@ export default async function TeamPage({ params }: { params: Promise<{ lang: str
           </table>
         </div>
         <p style={{ marginTop: 16 }}>
-          Want to lead? <Link href={href(lang, "/ward-leaders")}>Become a ward leader</Link> or <Link href={href(lang, "/street-leaders")}>a street leader</Link>, or check any leader&apos;s ID on the{" "}
+          Want to lead? <Link href={href(lang, "/careers/ward-leaders")}>Become a ward leader</Link> or <Link href={href(lang, "/street-leaders")}>a street leader</Link>, or check any leader&apos;s ID on the{" "}
           <Link href={href(lang, "/verify")}>Verify page</Link>.
         </p>
         <Sources items={[{ label: CONCEPT_NOTE }, { label: PRD }]} />

@@ -355,6 +355,26 @@ await flow("Support: AI assistant answers an approved question", async (page, ct
   return (await page.locator(".chat-msg.is-assistant").last().innerText()).slice(0, 80);
 });
 
+await flow("Careers: ward finder finds Kawo, confirm, apply page carries the ward", async (page, ctx) => {
+  await acceptCookies(ctx);
+  await open(page, "/careers/ward-leaders");
+  const h1s = await page.locator("h1").count();
+  if (h1s !== 1) throw new Error(`${h1s} H1s`);
+  await page.locator("#wf-q").first().fill("Kawo mark");
+  await page.locator("#wf-sugs button").first().click();
+  await expectText(page, /Kawo/, "main");
+  await page.getByRole("button", { name: "Yes, this is my ward" }).first().click();
+  const apply = page.locator("main a[href*='/careers/ward-leaders/apply?ward=']").filter({ visible: true }).first();
+  const href = await apply.getAttribute("href");
+  if (!/ward=/.test(href ?? "")) throw new Error(`apply link has no ward: ${href}`);
+  await page.goto(base + "/careers/ward-leaders/apply" + href.slice(href.indexOf("?")), { waitUntil: "load" });
+  await expectText(page, /Register free to apply/, "main");
+  await page.goto(base + "/ward-leaders", { waitUntil: "load" });
+  await page.waitForURL(/careers\/ward-leaders/);
+  if (!/\/careers\/ward-leaders/.test(page.url())) throw new Error("no redirect: " + page.url());
+  return `apply link ${href}`;
+});
+
 await flow("Forms: Report a Concern validates and returns a reference", async (page, ctx) => {
   await acceptCookies(ctx);
   await open(page, "/report");

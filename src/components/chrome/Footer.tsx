@@ -2,19 +2,11 @@ import Link from "next/link";
 import { Hashtag } from "@/components/ui/Hashtag";
 import { footerColumns, footerUtility, legalLinks } from "@/data/nav";
 import { href, type Locale } from "@/lib/i18n";
-import { site } from "@/config/site";
+import { site, socialLabels } from "@/config/site";
 import type { Dict } from "@/i18n";
 import { FooterCounter } from "./FooterCounter";
 import { StoreBadges } from "@/components/ui/StoreBadges";
 import { CookieSettingsButton } from "./CookieBanner";
-
-const socialLabels: Record<keyof typeof site.social, string> = {
-  x: "X (Twitter)",
-  instagram: "Instagram",
-  facebook: "Facebook",
-  tiktok: "TikTok",
-  youtube: "YouTube",
-};
 
 export function Footer({ locale, t }: { locale: Locale; t: Dict }) {
   const L = (p: string) => href(locale, p);

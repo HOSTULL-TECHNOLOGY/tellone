@@ -66,7 +66,7 @@ export default async function GroupsPage({ params }: { params: Promise<{ lang: s
             <Link href={L("/street-leaders")} className="btn btn-sm btn-ghost">
               Street leaders
             </Link>{" "}
-            <Link href={L("/ward-leaders")} className="btn btn-sm btn-ghost">
+            <Link href={L("/careers/ward-leaders")} className="btn btn-sm btn-ghost">
               Ward leaders
             </Link>
           </div>

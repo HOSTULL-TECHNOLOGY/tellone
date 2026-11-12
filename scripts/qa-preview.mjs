@@ -188,6 +188,22 @@ await check("Language switch: Yorùbá version of the same page", async (page) =
   return `${here(page)} lang=${await page.evaluate(() => document.documentElement.lang)}`;
 });
 
+await check("Careers: ward finder works offline (Kawo), apply link opens with the ward; old /ward-leaders redirects", async (page) => {
+  await page.goto(root + "pages/en__careers__ward-leaders.html");
+  await page.locator("#wf-q").first().fill("Kawo mark");
+  await page.locator("#wf-sugs button").first().click();
+  await page.getByRole("button", { name: "Yes, this is my ward" }).first().click();
+  const apply = page.locator("main a[href*='apply']").filter({ hasText: /apply|register/i }).filter({ visible: true });
+  await page.locator(".wf-result, main").filter({ hasText: /Kawo/ }).first().waitFor();
+  await page.locator("main a[href*='ward=']").filter({ visible: true }).first().click();
+  await page.waitForURL(/careers__ward-leaders__apply\.html/);
+  await page.locator("main").filter({ hasText: /Register free to apply/ }).first().waitFor();
+  const applyUrl = here(page) + (page.url().includes("ward=") ? " (ward kept)" : " (NO ward)");
+  await page.goto(root + "pages/en__ward-leaders.html");
+  await page.waitForURL(/en__careers__ward-leaders\.html/);
+  return `${applyUrl}; redirect → ${here(page)}; ${await apply.count()} apply links`;
+});
+
 await check("Search: results for “PVC”", async (page) => {
   await page.goto(root + "pages/en__search.html?q=PVC");
   await settle(page);

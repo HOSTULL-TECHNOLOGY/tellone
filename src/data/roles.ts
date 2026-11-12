@@ -110,6 +110,7 @@ export const roles: Role[] = [
       { slug: "weak-spots", label: "Weak spots", icon: "TriangleAlert", prd: "ST-3" },
       { slug: "pipeline", label: "Project pipeline", icon: "GitBranch", prd: "ST-4" },
       { slug: "approvals", label: "Approvals", icon: "ClipboardCheck", prd: "ST-5" },
+      { slug: "ward-applications", label: "Ward leader applicants", icon: "ClipboardList", prd: "CAR-32" },
       { slug: "logistics", label: "Materials & logistics", icon: "Truck", prd: "ST-6" },
       { slug: "events", label: "Events", icon: "CalendarDays", prd: "ST-7" },
       { slug: "incidents", label: "Incident queue", icon: "ShieldAlert", prd: "ST-8" },
@@ -212,6 +213,7 @@ export const roles: Role[] = [
       { slug: "giveaways", label: "Giveaway manager", icon: "Gift", prd: "NC-9" },
       { slug: "users", label: "Users & roles", icon: "UserCog", prd: "NC-10" },
       { slug: "visibility", label: "Search & AI visibility", icon: "Search", prd: "NC-11" },
+      { slug: "recruitment", label: "Ward leader recruitment", icon: "Megaphone", prd: "CAR-12" },
     ],
   },
   {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AlertTriangle, ArrowUpRight, Check, Download, Lock, ShieldAlert, X } from "lucide-react";
+import { StateApplicants } from "@/components/careers/RecruitmentDashboards";
 import { DashboardShell } from "@/components/dashboard/Shell";
 import { BarChart, Badge, Kpis, Meter, Panel, naira } from "@/components/dashboard/kit";
 import { CheckField, SelectField, TextArea, simulate } from "@/components/ui/Form";
@@ -34,6 +35,8 @@ function Screens({ section, user }: { section: string; user: DemoUser }) {
       return <Pipeline />;
     case "approvals":
       return <Approvals log={audit.log} items={audit.items} />;
+    case "ward-applications":
+      return <StateApplicants />;
     case "logistics":
       return <Logistics />;
     case "events":

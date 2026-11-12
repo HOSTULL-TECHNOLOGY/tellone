@@ -99,7 +99,7 @@ export default async function DiasporaPage({ params }: { params: Promise<{ lang:
           Chapter coordinator contacts are shared privately after you join. TBH One never publishes personal numbers.
         </p>
       </Section>
-      <Section title="Start or join a chapter" intro="No chapter in your city? Tell us and we&apos;ll connect you with other members nearby.">
+      <Section id="apply" title="Start or join a chapter" intro="No chapter in your city? Tell us and we&apos;ll connect you with other members nearby.">
         <div className="split">
           <ApplyForm
             kind="diaspora-chapter"

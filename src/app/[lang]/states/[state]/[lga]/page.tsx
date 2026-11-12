@@ -43,7 +43,7 @@ export default async function LgaPage({ params }: { params: Promise<{ lang: stri
             <Link href={L("/join")} className="btn btn-primary">
               Join in {l.name}
             </Link>
-            <Link href={L("/ward-leaders")} className="btn btn-outline">
+            <Link href={L("/careers/ward-leaders")} className="btn btn-outline">
               Lead a ward here
             </Link>
           </>
@@ -83,7 +83,7 @@ export default async function LgaPage({ params }: { params: Promise<{ lang: stri
       <CtaBand
         title={`Be the first ward leader in ${l.name}`}
         actions={
-          <Link href={L("/ward-leaders")} className="btn btn-primary">
+          <Link href={L("/careers/ward-leaders")} className="btn btn-primary">
             Apply now
           </Link>
         }

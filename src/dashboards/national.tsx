@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { AlertTriangle, Ban, CalendarClock, CheckCircle2, Dice5, FilePlus, Gift, Plus, ShieldCheck, Trophy, UserMinus, UserPlus } from "lucide-react";
 import "@/styles/dash-office.css";
+import { NationalRecruitment } from "@/components/careers/RecruitmentDashboards";
 import { DashboardShell } from "@/components/dashboard/Shell";
 import { AuditList, Badge, BarChart, Grid, Kpis, Meter, naira, Panel, Spark, type Tone } from "@/components/dashboard/kit";
 import { DataTable, type Column } from "@/components/ui/DataTable";
@@ -72,6 +73,8 @@ function National({ section, user }: { section: string; user: DemoUser }) {
       return <Users me={me} audit={audit} addAudit={addAudit} />;
     case "visibility":
       return <Visibility />;
+    case "recruitment":
+      return <NationalRecruitment />;
     default:
       return <Scorecard projects={projects} />;
   }

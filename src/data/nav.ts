@@ -50,7 +50,7 @@ export const mainNav: NavMenu[] = [
         links: [
           { label: "Become a Member", path: "/join", desc: "Free sign-up" },
           { label: "Fund a Project", path: "/projects", desc: "Projects with live progress" },
-          { label: "Ward Leaders", path: "/ward-leaders", desc: "Role, benefits, apply" },
+          { label: "Ward Leaders", path: "/careers/ward-leaders", desc: "8,809 places, apply free" },
           { label: "Street Leaders", path: "/street-leaders", desc: "Role, earnings, apply" },
           { label: "Diaspora Chapters", path: "/diaspora", desc: "Tell One from abroad" },
         ],
@@ -73,6 +73,7 @@ export const mainNav: NavMenu[] = [
       {
         title: "forMembers",
         links: [
+          { label: "Careers", path: "/careers" },
           { label: "Member Benefits", path: "/benefits" },
           { label: "Jobs", path: "/jobs" },
           { label: "Training Calendar", path: "/training" },
@@ -166,7 +167,7 @@ export const footerColumns: { key: "discover" | "participate" | "shopMedia" | "h
     links: [
       { label: "Become a Member", path: "/join" },
       { label: "Fund a Project", path: "/projects" },
-      { label: "Ward & Street Leaders", path: "/ward-leaders" },
+      { label: "Careers: Ward & Street Leaders", path: "/careers" },
       { label: "Diaspora Chapters", path: "/diaspora" },
       { label: "Event Calendar", path: "/events" },
       { label: "Impact Points & Rewards", path: "/rewards" },

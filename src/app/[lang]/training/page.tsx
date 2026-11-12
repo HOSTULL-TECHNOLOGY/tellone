@@ -1,4 +1,6 @@
 import "@/styles/participate.css";
+import Link from "next/link";
+import { href } from "@/lib/i18n";
 import { localeParams } from "@/lib/meta";
 import { localeOf, metaFor } from "@/components/participate/pageKit";
 import { PhotoFigure } from "@/components/PeopleMosaic";
@@ -56,11 +58,18 @@ export default async function TrainingPage({ params }: { params: Promise<{ lang:
         </div>
         <PrototypeNote>Registrations are saved in this browser only in the prototype.</PrototypeNote>
       </Section>
+      <Section title="Ward leader training">
+        <p>Approved ward leaders complete a 2-hour online course before they start: event safety (35 minutes), vetting street leaders (30), approvals (25) and project management (30).</p>
+        <p>
+          <Link href={href(locale, "/training/leader")} className="btn btn-primary">Start the ward leader training</Link>
+        </p>
+      </Section>
       <Section alt narrow>
         <Faq
           items={[
             { q: "Is training free?", a: "Yes. All TBH One training is free for members. Nobody may charge you to attend." },
             { q: "Which courses are required?", a: "Safety, conduct and reporting is required before any field task. Ward leaders also complete Running a village meeting." },
+            { q: "Where is the ward leader training?", a: "Approved ward leaders take a 2-hour online course in four modules: event safety, vetting street leaders, approvals and project management. Open it from your dashboard, or go to Ward leader training below." },
             { q: "Do I get a certificate?", a: "Completed courses appear on your dashboard and earn Impact Points." },
           ]}
         />

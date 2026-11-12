@@ -344,3 +344,12 @@
 /whatsapp
 /yo
 /yo/about
+/careers
+/careers/ward-leaders
+/careers/ward-leaders/apply
+/training/leader
+/street-activation-guide
+/pcm/careers/ward-leaders
+/yo/careers/ward-leaders
+/ha/careers/ward-leaders
+/ig/careers/ward-leaders

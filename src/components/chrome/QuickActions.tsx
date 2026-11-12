@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Gift, HandCoins, MessageCircle, ShoppingBag, UserPlus } from "lucide-react";
+import { BadgeCheck, Gift, HandCoins, MessageCircle, ShoppingBag, UserPlus } from "lucide-react";
+import { WAVE } from "@/data/careers";
 import { href, type Locale } from "@/lib/i18n";
 import type { Dict } from "@/i18n";
 
@@ -10,6 +11,8 @@ export function QuickActions({ locale, t }: { locale: Locale; t: Dict }) {
     { path: "/projects", label: t.quick.fund, icon: HandCoins },
     { path: "/shop", label: t.quick.shop, icon: ShoppingBag },
     { path: "/giveaway", label: t.quick.giveaway, icon: Gift },
+    // During ward leader recruitment (until wave 1 closes): side-menu link to Careers
+    ...(Date.now() < Date.parse(`${WAVE.closes}T23:59:59+01:00`) ? [{ path: "/careers/ward-leaders", label: t.quick.lead, icon: BadgeCheck }] : []),
     { path: "/contact", label: t.quick.talk, icon: MessageCircle },
   ];
   return (

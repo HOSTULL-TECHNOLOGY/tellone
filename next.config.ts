@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
       { source: "/movies", destination: "/media/movies", permanent: true },
       { source: "/gallery", destination: "/media/gallery", permanent: true },
       { source: "/offers", destination: "/shop/offers", permanent: true },
+      // CAR-1: one canonical ward leader page
+      { source: "/ward-leaders", destination: "/careers/ward-leaders", permanent: true },
+      { source: "/:lang(pcm|yo|ha|ig)/ward-leaders", destination: "/:lang/careers/ward-leaders", permanent: true },
       { source: "/en", destination: "/", permanent: true },
       { source: "/en/:path*", destination: "/:path*", permanent: true },
     ];

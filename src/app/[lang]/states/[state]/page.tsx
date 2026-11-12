@@ -83,7 +83,7 @@ export default async function StatePage({ params }: { params: Promise<{ lang: st
           </ul>
         ) : (
           <p>
-            No projects are published for {s.name} yet. Ward leaders can propose one. <Link href={L("/ward-leaders")}>Become a ward leader</Link>.
+            No projects are published for {s.name} yet. Ward leaders can propose one. <Link href={L("/careers/ward-leaders")}>Become a ward leader</Link>.
           </p>
         )}
       </Section>
@@ -120,7 +120,7 @@ export default async function StatePage({ params }: { params: Promise<{ lang: st
         title={`Lead TBH One in ${s.name}`}
         actions={
           <>
-            <Link href={L("/ward-leaders")} className="btn btn-primary">
+            <Link href={L("/careers/ward-leaders")} className="btn btn-primary">
               Become a ward leader
             </Link>
             <Link href={L("/street-leaders")} className="btn btn-outline">
