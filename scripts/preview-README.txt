@@ -62,10 +62,12 @@ THINGS TO TRY
 - Ward Leaders careers (side menu: Get Involved, then Ward Leaders, or the red band on the homepage):
     - find your ward: type a place such as "Kawo market", pick from the State, LGA and ward lists, or use
       your location (the browser asks for permission);
-    - confirm the ward, then "Register Free and Apply": register with any phone number and code 123456,
-      then fill in the application. The confirmation shows your reference and the progress tracker;
-    - Vision Meter: after registering, follow the platforms, upload a screenshot as proof and watch the
-      points become verified;
+    - confirm the ward, then "Register Free and Apply". The application starts with "Follow us": tick the
+      consent box, follow a few of the 13 accounts (Instagram ... WhatsApp Channel, Telegram), upload a
+      screenshot as proof and watch the points become verified;
+    - continue to register with any phone number and code 123456, then fill in the application
+      ("Save draft" keeps it). The last page shows your reference, what happens next, and more ways to earn
+      Vision Points (events, the Vision Quiz, invites);
     - Dashboards: Member > Apply shows your application. National team > Ward leader recruitment shows the
       funnel. State coordinator > Ward leader applicants shows the scoring queue.
 - Staying signed in: after signing in, go back to the website. The top bar shows your name, with links to your

@@ -94,7 +94,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <section className="cw-homeband band-red" aria-labelledby="cw-band-h">
           <div className="container cw-homeband-row">
             <div>
-              <p className="cw-eyebrow cw-eyebrow-inv">TBH One Careers · Wave 1</p>
+              <p className="cw-eyebrow cw-eyebrow-inv">We’re Hiring Ward Leaders</p>
               <h2 id="cw-band-h">{headlines.b}</h2>
               <WardCounter variant="band" />
             </div>
@@ -103,7 +103,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 Find your ward
               </Link>
               <Link href={L("/careers/ward-leaders/apply")} className="btn btn-lg btn-outline">
-                Register Free and Apply
+                Apply
               </Link>
             </div>
           </div>

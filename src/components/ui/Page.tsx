@@ -57,14 +57,14 @@ export function PageHeader({
   aside?: ReactNode;
 }) {
   return (
-    <header className="page-head pattern band-green">
+    <header className="page-head page-head-white">
       <div className="container">
         <Breadcrumbs locale={locale} items={crumbs} />
         <div className={`page-head-grid${aside ? " has-aside" : ""}`}>
           <div>
             <h1>{title}</h1>
             {kicker && <p className="page-kicker">{kicker}</p>}
-            <div className="quick-answer" role="note" aria-label="Quick answer">
+            <div className="quick-answer band-green" role="note" aria-label="Quick answer">
               {typeof answer === "string" ? <p>{answer}</p> : answer}
             </div>
             {updated && (
@@ -74,7 +74,7 @@ export function PageHeader({
             )}
             {actions && <div className="page-actions">{actions}</div>}
           </div>
-          {aside && <div className="page-aside">{aside}</div>}
+          {aside && <div className="page-aside band-green">{aside}</div>}
         </div>
       </div>
     </header>

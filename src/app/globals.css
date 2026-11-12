@@ -150,7 +150,7 @@
 
 /* ========================================================================== Base */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 76px); }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--topbar-h, 49px) + var(--header-h) + 76px); }
 body {
   margin: 0; background: var(--paper); color: var(--ink);
   font-family: var(--font-text); font-size: var(--step-0); line-height: 1.55;

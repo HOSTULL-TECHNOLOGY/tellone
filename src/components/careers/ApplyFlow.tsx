@@ -8,21 +8,60 @@ import { Notice } from "@/components/ui/Page";
 import { useToast } from "@/components/ui/Toast";
 import { DEMO_OTP, findUser, registerDemoUser, signIn, useSession, type DemoUser } from "@/lib/auth";
 import { loadWards, readApplications, readFound, saveApplication, saveFound, type Application, type FoundWard, type Ward } from "@/lib/wards";
-import { edges, flow, messages, vision, WAVE } from "@/data/careers";
-import { readVision, visionTotals } from "./VisionMeter";
+import { edges, flow, messages, microcopy, vision, WAVE } from "@/data/careers";
+import { readPref, writePref } from "@/lib/prefs";
+import { readVision, VisionMeter, visionTotals } from "./VisionMeter";
 import { WardFinder } from "./WardFinder";
 
 /**
- * Sign-up and application flow (CAR-2, CAR-4, CAR-15, CAR-16, CAR-21). New visitors register as members first and
- * return to the application automatically; members go straight to it. SIMULATED: nothing leaves the browser.
+ * Sign-up and application flow (CAR-2, CAR-4, CAR-15, CAR-16, CAR-21), in four steps:
+ *   1 Follow us (the Vision Points tiles, before anything is filled in) → 2 Register (new visitors only) →
+ *   3 Apply → 4 Boost more (events, quiz and invites on the last page).
+ * SIMULATED: nothing leaves the browser.
  */
-type Hrefs = { careers: string; street: string; diaspora: string; dashboard: string; boost: string; terms: string; privacy: string; conduct: string; login: string };
+type Hrefs = { careers: string; street: string; diaspora: string; dashboard: string; boost: string; terms: string; privacy: string; conduct: string; login: string; events: string };
+const FOLLOWED = "tbh-wl-follow-step";
+const JOURNEY = ["Follow us", "Register", "Apply", "Boost more"];
+
+function Journey({ at, member }: { at: number; member: boolean }) {
+  return (
+    <ol className="ap-journey" aria-label="Your application, step by step">
+      {JOURNEY.map((s, i) => (
+        <li key={s} className={`${i < at ? "is-done" : ""}${i === at ? " is-now" : ""}${member && i === 1 ? " is-skip" : ""}`} aria-current={i === at ? "step" : undefined}>
+          <span>{i + 1}</span> {s}
+          {member && i === 1 ? <em className="sr-only"> (done: you are a member)</em> : null}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function FollowStep({ member, onContinue }: { member: boolean; onContinue: () => void }) {
+  return (
+    <div className="ap-card ap-follow">
+      <h2>Start here: follow TBH One</h2>
+      <p className="ap-lead">
+        Before you fill anything in, follow our official accounts. It takes 5 to 15 minutes and shows you believe in the vision. Vision Points are 20 of the 100 points we use to choose, and they help most when more than one person applies for your ward. It is optional: you can continue at any time.
+      </p>
+      <VisionMeter part="follow" />
+      <div className="form-actions">
+        <button type="button" className="btn btn-primary btn-lg" onClick={onContinue}>
+          {member ? "Continue to the application" : "Continue: register free"}
+        </button>
+      </div>
+      <p className="small muted">Your follows are saved on this device and move into your member account when you register.</p>
+    </div>
+  );
+}
 
 export function ApplyFlow({ hrefs }: { hrefs: Hrefs }) {
   const { ready, user } = useSession();
   const [ward, setWard] = useState<Ward | FoundWard | null>(null);
   const [wardMissing, setWardMissing] = useState(false);
   const [justRegistered, setJustRegistered] = useState<DemoUser | null>(null);
+  const [followed, setFollowed] = useState<boolean | null>(null);
+  useEffect(() => setFollowed(readPref(FOLLOWED) === "1"), []);
+  const hasApp = !!user && readApplications().some((a) => a.userId === user.id);
 
   // The ward found by the finder (?ward=… or remembered) carries into registration and the application
   useEffect(() => {
@@ -41,7 +80,7 @@ export function ApplyFlow({ hrefs }: { hrefs: Hrefs }) {
     }
   }, []);
 
-  if (!ready) return <div className="ap-card" aria-busy="true" />;
+  if (!ready || followed === null) return <div className="ap-card" aria-busy="true" />;
   if (Date.now() > new Date(`${WAVE.closes}T23:59:59+01:00`).getTime())
     return (
       <div className="ap-card">
@@ -51,11 +90,30 @@ export function ApplyFlow({ hrefs }: { hrefs: Hrefs }) {
       </div>
     );
 
+  if (!followed && !hasApp)
+    return (
+      <>
+        <Journey at={0} member={!!user} />
+        <FollowStep
+          member={!!user}
+          onContinue={() => {
+            writePref(FOLLOWED, "1");
+            setFollowed(true);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
+      </>
+    );
   if (!user || justRegistered) {
-    return justRegistered ? (
-      <Welcome name={justRegistered.firstName} onContinue={() => setJustRegistered(null)} />
-    ) : (
-      <Register ward={ward} setWard={setWard} wardMissing={wardMissing} hrefs={hrefs} onDone={(u) => setJustRegistered(u)} />
+    return (
+      <>
+        <Journey at={1} member={false} />
+        {justRegistered ? (
+          <Welcome name={justRegistered.firstName} onContinue={() => setJustRegistered(null)} />
+        ) : (
+          <Register ward={ward} setWard={setWard} wardMissing={wardMissing} hrefs={hrefs} onDone={(u) => setJustRegistered(u)} />
+        )}
+      </>
     );
   }
   return <Application user={user} ward={ward} setWard={setWard} wardMissing={wardMissing} hrefs={hrefs} />;
@@ -198,7 +256,7 @@ function Register({ ward, setWard, wardMissing, hrefs, onDone }: { ward: Ward | 
             error={err.ok18}
           />
           <CheckField label={flow.consent.updates} checked={updates} onChange={(e) => setUpdates(e.target.checked)} />
-          <SubmitButton busy={busy}>{flow.consent.button}</SubmitButton>
+          <SubmitButton busy={busy}>{busy ? flow.consent.busy : flow.consent.button}</SubmitButton>
         </form>
       )}
     </div>
@@ -225,10 +283,6 @@ const age = (dob: string) => {
   const now = new Date();
   return now.getFullYear() - d.getFullYear() - (now < new Date(now.getFullYear(), d.getMonth(), d.getDate()) ? 1 : 0);
 };
-const sameName = (a: string, first: string, last: string) => {
-  const t = a.toLowerCase().split(/[\s,.-]+/).filter(Boolean);
-  return t.includes(first.toLowerCase()) && t.includes(last.toLowerCase());
-};
 
 function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUser; ward: Ward | FoundWard | null; setWard: (w: Ward) => void; wardMissing: boolean; hrefs: Hrefs }) {
   const toast = useToast();
@@ -236,12 +290,24 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
   const [existing, setExisting] = useState<Application | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<Record<string, string>>({});
-  const [f, setF] = useState({ live: false, years: "", streets: "", dob: "", occupation: "", languages: "", device: "Android", groups: [] as string[], groupYears: "", helped: "", eName: "", eRole: flow.endorserRoles[0], ePhone: "", idType: flow.idTypes[0], idNumber: "", idPhoto: false, selfie: false, payType: "bank", bank: "", account: "", accountName: "", momo: "", hours: flow.hours[1], pledges: [false, false, false], socialConsent: false });
+  const [f, setF] = useState({ live: false, years: "", streets: "", dob: "", occupation: "", languages: "", device: "Android", groups: [] as string[], groupYears: "", helped: "", hours: "", pledges: [false, false, false], socialConsent: false });
   useEffect(() => {
     const mine = readApplications().find((a) => a.userId === user.id);
     if (mine) setExisting(mine);
   }, [user.id]);
   const set = (k: keyof typeof f, v: unknown) => setF((x) => ({ ...x, [k]: v }));
+  const draftKey = `tbh-wl-draft:${user.id}`;
+  // Draft: restored on return, kept as the person types, cleared on submit
+  useEffect(() => {
+    try {
+      const d = readPref(draftKey);
+      if (d) setF((x) => ({ ...x, ...JSON.parse(d) }));
+    } catch {}
+  }, [draftKey]);
+  useEffect(() => {
+    const t = window.setTimeout(() => writePref(draftKey, JSON.stringify(f)), 400);
+    return () => window.clearTimeout(t);
+  }, [f, draftKey]);
 
   if (user.country)
     return (
@@ -251,24 +317,42 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
         </Notice>
       </div>
     );
-  if (done) return <Confirmation app={done} name={user.firstName} hrefs={hrefs} />;
+  if (done)
+    return (
+      <>
+        <Journey at={3} member />
+        <Confirmation app={done} name={user.firstName} hrefs={hrefs} />
+      </>
+    );
   if (existing)
     return (
-      <div className="ap-card">
-        <Notice tone="info" title="You’ve already applied">
-          {edges.duplicate(existing.ref)}
-        </Notice>
-        <Tracker stage={existing.stage} />
-        <Link href={hrefs.dashboard} className="btn btn-primary">
-          Open your dashboard
-        </Link>
-      </div>
+      <>
+        <Journey at={3} member />
+        <div className="ap-card">
+          <Notice tone="info" title="You’ve already applied">
+            {edges.duplicate(existing.ref)}
+          </Notice>
+          <Tracker stage={existing.stage} />
+          <Link href={hrefs.dashboard} className="btn btn-primary">
+            Open your dashboard
+          </Link>
+        </div>
+        <div className="ap-card">
+          <VisionMeter part="more" eventsHref={hrefs.events} inviteRef={user.id} />
+          <details className="ap-more-follow">
+            <summary>Follow more of our accounts</summary>
+            <VisionMeter part="follow" />
+          </details>
+        </div>
+      </>
     );
 
   const taken = ward && "status" in ward && ward.status === 1;
   const otherState = ward && user.state && user.state !== ward.stateName && !(user.state === "FCT" && ward.state === "fct");
 
   return (
+    <>
+    <Journey at={2} member />
     <form
       className="ap-card ap-form"
       noValidate
@@ -281,18 +365,8 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
         const a = age(f.dob);
         if (a < 0) x.dob = "Enter your date of birth.";
         else if (a < 18) x.dob = edges.under18;
-        if (!f.occupation.trim()) x.occupation = "Enter your occupation.";
         if (f.helped.trim().split(/\s+/).length < 6) x.helped = "In two sentences, tell us how you have helped your community.";
-        if (!f.eName.trim()) x.eName = "Enter your endorser's name.";
-        if (!isNgPhone(f.ePhone)) x.ePhone = "Enter your endorser's Nigerian mobile number. They receive an SMS to confirm.";
-        if (f.idNumber.trim().length < 6) x.idNumber = "Enter your ID number.";
-        if (!f.idPhoto) x.idPhoto = "Upload a photo of your ID.";
-        if (!f.selfie) x.selfie = "Upload a selfie holding your ID.";
-        if (f.payType === "bank") {
-          if (!f.bank) x.bank = "Choose your bank.";
-          if (!/^\d{10}$/.test(f.account)) x.account = "Enter your 10-digit account number.";
-          if (!sameName(f.accountName, user.firstName, user.lastName)) x.accountName = edges.nameMismatch;
-        } else if (!isNgPhone(f.momo)) x.momo = "Enter the mobile-money number in your name.";
+        if (!f.hours) x.hours = "Choose how many hours a day you can give.";
         if (f.pledges.some((p) => !p)) x.pledges = "Tick all three pledges to apply.";
         setErr(x);
         if (Object.keys(x).length) {
@@ -307,11 +381,12 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
           userId: user.id,
           ward: { id: ward!.id, name: ward!.name, lga: ward!.lga, state: ward!.state, stateName: ward!.stateName },
           at: new Date().toISOString(),
-          endorser: { name: f.eName.trim(), role: f.eRole, phone: f.ePhone.trim() },
+          hours: f.hours,
           stage: 2,
           vision: visionTotals(readVision(user.id)).verified,
         };
         saveApplication(app);
+        writePref(draftKey, "");
         setBusy(false);
         setDone(app);
         toast(`Application ${ref} received.`);
@@ -363,7 +438,7 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
         <legend>About you</legend>
         <div className="form-row">
           <TextField label="Date of birth (must be 18+)" type="date" value={f.dob} onChange={(e) => set("dob", e.target.value)} error={err.dob} required />
-          <TextField label="Occupation" value={f.occupation} onChange={(e) => set("occupation", e.target.value)} error={err.occupation} required />
+          <TextField label="Occupation (optional)" value={f.occupation} onChange={(e) => set("occupation", e.target.value)} />
         </div>
         <div className="form-row">
           <TextField label="Languages you speak" placeholder="e.g. Hausa, English" value={f.languages} onChange={(e) => set("languages", e.target.value)} />
@@ -387,63 +462,19 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
       </fieldset>
 
       <fieldset className="ap-sec">
-        <legend>Endorsement</legend>
-        <div className="form-row">
-          <TextField label="Endorser’s name" value={f.eName} onChange={(e) => set("eName", e.target.value)} error={err.eName} required />
-          <SelectField label="Their role" options={flow.endorserRoles} value={f.eRole} onChange={(e) => set("eRole", e.target.value)} />
-        </div>
-        <TextField label="Their phone number" type="tel" inputMode="tel" value={f.ePhone} onChange={(e) => set("ePhone", e.target.value)} error={err.ePhone} hint="They receive an SMS to confirm." required />
-      </fieldset>
-
-      <fieldset className="ap-sec">
-        <legend>Verification</legend>
-        <div className="form-row">
-          <SelectField label="ID type" options={flow.idTypes} value={f.idType} onChange={(e) => set("idType", e.target.value)} />
-          <TextField label="ID number" value={f.idNumber} onChange={(e) => set("idNumber", e.target.value)} error={err.idNumber} required />
-        </div>
-        <div className="form-row">
-          <FileField label="Photo of ID" error={err.idPhoto} onChange={(v) => set("idPhoto", v)} />
-          <FileField label="Selfie holding your ID" error={err.selfie} onChange={(v) => set("selfie", v)} capture />
-        </div>
-        <p className="small muted">ID photos and selfies are stored encrypted and kept for the campaign period plus 12 months, then deleted.</p>
-      </fieldset>
-
-      <fieldset className="ap-sec">
-        <legend>Payment</legend>
-        <div className="ap-chips" role="radiogroup" aria-label="How we pay you">
-          {[
-            ["bank", "Bank account"],
-            ["momo", "Mobile money"],
-          ].map(([k, l]) => (
-            <label key={k} className="ap-chip">
-              <input type="radio" name="pay" checked={f.payType === k} onChange={() => set("payType", k)} />
-              <span>{l}</span>
-            </label>
-          ))}
-        </div>
-        {f.payType === "bank" ? (
-          <>
-            <div className="form-row">
-              <SelectField label="Bank name" placeholder="Choose your bank" options={["Access Bank", "First Bank", "GTBank", "UBA", "Zenith Bank", "Fidelity Bank", "Union Bank", "Sterling Bank", "Wema Bank", "Ecobank", "FCMB", "Stanbic IBTC", "Opay", "Moniepoint", "Kuda", "PalmPay"]} value={f.bank} onChange={(e) => set("bank", e.target.value)} error={err.bank} />
-              <TextField label="Account number" inputMode="numeric" maxLength={10} value={f.account} onChange={(e) => set("account", e.target.value.replace(/\D/g, ""))} error={err.account} />
-            </div>
-            <TextField label="Name on the account (must match your ID)" value={f.accountName} onChange={(e) => set("accountName", e.target.value)} error={err.accountName} />
-          </>
-        ) : (
-          <TextField label="Mobile-money number (in your name)" type="tel" inputMode="tel" value={f.momo} onChange={(e) => set("momo", e.target.value)} error={err.momo} />
-        )}
-      </fieldset>
-
-      <fieldset className="ap-sec">
         <legend>Availability</legend>
-        <div className="ap-chips" role="radiogroup" aria-label="Hours per week you can give">
+        <p className="ap-label" id="ap-hours-l">
+          How many hours a day can you give? <span className="req" aria-hidden>*</span>
+        </p>
+        <div className="ap-chips" role="radiogroup" aria-labelledby="ap-hours-l">
           {flow.hours.map((h) => (
             <label key={h} className="ap-chip">
               <input type="radio" name="hours" checked={f.hours === h} onChange={() => set("hours", h)} />
-              <span>{h} hours a week</span>
+              <span>{h}</span>
             </label>
           ))}
         </div>
+        {err.hours && <p className="field-error">{err.hours}</p>}
         <p className="small muted">
           Optional: your usernames on our 11 platforms earn Vision Points. <Link href={hrefs.boost}>Open the Boost panel</Link> (your current score: {visionTotals(readVision(user.id)).verified} / 100).
         </p>
@@ -463,23 +494,26 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
         {err.pledges && <p className="field-error">{err.pledges}</p>}
       </fieldset>
 
+      <p className="small muted">If you are selected, the state team will call you to check your ID, your endorser and your payment details before you start. You don’t need to upload anything now.</p>
       {Object.keys(err).length > 0 && <Notice tone="danger">Please check the highlighted fields.</Notice>}
-      <SubmitButton busy={busy} className="btn btn-primary btn-lg" disabled={!!taken}>
-        {flow.submit}
-      </SubmitButton>
+      <div className="form-actions">
+        <SubmitButton busy={busy} className="btn btn-primary btn-lg" disabled={!!taken}>
+          {flow.submit}
+        </SubmitButton>
+        <button
+          type="button"
+          className="btn btn-outline btn-lg"
+          onClick={() => {
+            writePref(draftKey, JSON.stringify(f));
+            toast(microcopy.draftSaved);
+          }}
+        >
+          Save draft
+        </button>
+      </div>
       <p className="small muted">{vision.copy.fairness}</p>
     </form>
-  );
-}
-
-function FileField({ label, error, onChange, capture }: { label: string; error?: string; onChange: (v: boolean) => void; capture?: boolean }) {
-  const id = label.replace(/\W+/g, "-").toLowerCase();
-  return (
-    <div className={`field${error ? " has-error" : ""}`}>
-      <label htmlFor={id}>{label}</label>
-      <input id={id} type="file" accept="image/*" {...(capture ? { capture: "user" as const } : {})} onChange={(e) => onChange(!!e.target.files?.length)} aria-invalid={!!error} />
-      {error && <p className="field-error">{error}</p>}
-    </div>
+    </>
   );
 }
 
@@ -499,23 +533,36 @@ export function Tracker({ stage }: { stage: number }) {
 function Confirmation({ app, name, hrefs }: { app: Application; name: string; hrefs: Hrefs }) {
   const fill = (m: string) => m.replace("{name}", name).replace("{ref}", app.ref).replace("{ward}", app.ward.name);
   return (
-    <div className="ap-card ap-done">
-      <CheckCircle2 size={44} aria-hidden />
-      <h2>Application {app.ref}</h2>
-      <p className="ap-lead">{flow.confirmation(name, app.ref)}</p>
-      <Tracker stage={app.stage} />
-      <div className="ap-sms">
-        <p className="small muted">SMS sent to you</p>
-        <p>{fill(messages.received)}</p>
+    <>
+      <div className="ap-card ap-done">
+        <CheckCircle2 size={44} aria-hidden />
+        <h2>Application {app.ref}</h2>
+        <p className="ap-lead">{microcopy.afterSubmit(name, app.ref)}</p>
+        <Tracker stage={app.stage} />
+        <h3 className="ap-next-h">What happens next</h3>
+        <ol className="ap-next" role="list">
+          {microcopy.nextSteps.map((s, i) => (
+            <li key={s}>
+              <span>{i + 1}</span> {s}
+            </li>
+          ))}
+        </ol>
+        <div className="ap-sms">
+          <p className="small muted">SMS sent to you</p>
+          <p>{fill(messages.received)}</p>
+        </div>
+        <div className="form-actions">
+          <Link href={hrefs.dashboard} className="btn btn-primary">
+            Track it on your dashboard
+          </Link>
+          <a className="btn btn-outline" href={`https://wa.me/?text=${encodeURIComponent("TBH One is recruiting a leader for every ward in Nigeria. It's free to apply and you earn fees for the work. Check if your ward is taken: www.tbhone.com.ng/careers")}`} target="_blank" rel="noopener">
+            Tell a friend on WhatsApp
+          </a>
+        </div>
       </div>
-      <div className="form-actions">
-        <Link href={hrefs.dashboard} className="btn btn-primary">
-          Track it on your dashboard
-        </Link>
-        <Link href={hrefs.boost} className="btn btn-outline">
-          Boost your application
-        </Link>
+      <div className="ap-card" id="boost-more">
+        <VisionMeter part="more" eventsHref={hrefs.events} inviteRef={app.userId} />
       </div>
-    </div>
+    </>
   );
 }

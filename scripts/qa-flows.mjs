@@ -368,7 +368,7 @@ await flow("Careers: ward finder finds Kawo, confirm, apply page carries the war
   const href = await apply.getAttribute("href");
   if (!/ward=/.test(href ?? "")) throw new Error(`apply link has no ward: ${href}`);
   await page.goto(base + "/careers/ward-leaders/apply" + href.slice(href.indexOf("?")), { waitUntil: "load" });
-  await expectText(page, /Register free to apply/, "main");
+  await expectText(page, /Start here: follow TBH One/, "main");
   await page.goto(base + "/ward-leaders", { waitUntil: "load" });
   await page.waitForURL(/careers\/ward-leaders/);
   if (!/\/careers\/ward-leaders/.test(page.url())) throw new Error("no redirect: " + page.url());

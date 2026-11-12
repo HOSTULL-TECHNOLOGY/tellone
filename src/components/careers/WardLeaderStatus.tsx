@@ -15,7 +15,7 @@ import { readVision, visionTotals, levelFor } from "./VisionMeter";
 const stageMessages = (a: Application, name: string): { at: number; text: string; out?: boolean }[] => {
   const fill = (m: string) => m.replace(/\{name\}/g, name).replace(/\{ref\}/g, a.ref).replace(/\{ward\}/g, a.ward.name);
   const list: { at: number; text: string; out?: boolean }[] = [{ at: 1, text: fill(messages.received) }];
-  if (a.stage >= 2) list.push({ at: 2, text: `To your endorser, ${a.endorser.name}: ${fill(messages.endorser).replace("{full}", name)}`, out: true });
+  if (a.stage >= 3) list.push({ at: 3, text: `Good news, ${name}: you’ve been shortlisted for ${a.ward.name}. Your state team will call you to check your ID, endorser and payment details. TBH One never asks for money.` });
   if (a.stage >= 4) list.push({ at: 4, text: fill(messages.approved) });
   if (a.stage >= 6) list.push({ at: 6, text: messages.trained });
   return list;
@@ -70,14 +70,14 @@ export function WardLeaderStatus({ user, applyHref, boostHref, trainingHref }: {
     <section className="dpanel wls">
       <div className="dpanel-head"><h2>Your ward leader application</h2></div>
       <p>
-        <strong>{app.ref}</strong> · {app.ward.name} ward, {app.ward.lga}, {app.ward.stateName} · endorser: {app.endorser.name} ({app.endorser.role})
+        <strong>{app.ref}</strong> · {app.ward.name} ward, {app.ward.lga}, {app.ward.stateName} {app.hours ? <>· {app.hours}</> : null}
       </p>
       <Tracker stage={app.stage} />
       <ul className="ap-msgs" role="list" aria-label="Messages sent to you">
         {stageMessages(app, user.firstName).map((m, i) => (
           <li key={i} className={m.out ? "is-out" : ""}>
             {m.text}
-            <time>{["", "Application received", "Endorser asked to confirm", "", "Endorsed and verified", "", "Training complete"][m.at]}</time>
+            <time>{["", "Application received", "", "Shortlisted", "Verified and approved", "", "Training complete"][m.at]}</time>
           </li>
         ))}
       </ul>
@@ -89,7 +89,7 @@ export function WardLeaderStatus({ user, applyHref, boostHref, trainingHref }: {
         )}
         {app.stage < 6 && (
           <button type="button" className="btn btn-outline btn-sm" onClick={advance}>
-            Demo: next step ({["", "", "", "endorser confirms", "state team approves", "training complete", "leader ID issued"][app.stage + 1]})
+            Demo: next step ({["", "", "", "state team shortlists you", "verification call done, approved", "training complete", "leader ID issued"][app.stage + 1]})
           </button>
         )}
         <Link href={boostHref} className="btn btn-ghost btn-sm">

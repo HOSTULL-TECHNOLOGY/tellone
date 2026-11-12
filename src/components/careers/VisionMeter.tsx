@@ -3,28 +3,49 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, Clock, Upload, X } from "lucide-react";
-import { quiz, vision, waLink } from "@/data/careers";
+import { quiz, vision } from "@/data/careers";
 import { site } from "@/config/site";
 import { useSession } from "@/lib/auth";
 import { readPref, writePref } from "@/lib/prefs";
 import { useToast } from "@/components/ui/Toast";
 
 /**
- * Vision Points (CAR-26 to CAR-31): the live Vision Meter. Signed-out visitors see the sample meter from the
- * document; members get working tiles (follow → proof → pending → verified), the non-social route and the quiz.
+ * Vision Points (CAR-26 to CAR-31): the live Vision Meter, in two parts.
+ *  - part="follow": the first step of the application, before anything is filled in. 13 tiles (11 platforms,
+ *    WhatsApp Channel, Telegram): follow → proof → pending → verified. Works before registering: a visitor's
+ *    follows are kept under "guest" and move into their member account when they register or sign in.
+ *  - part="more": the last page, once the application is in: events, the Vision Quiz and invites.
  * SIMULATED: proofs are "checked" in the browser after a few seconds; production uses the review queue (CAR-29).
  */
 type TileState = "none" | "followed" | "checking" | "verified" | "unclear" | "removed";
 type VState = { consent: boolean; tiles: Partial<Record<string, TileState>>; handles: Partial<Record<string, string>>; channel: boolean; events: number; quiz: "none" | "passed" | "failed-once" | "failed"; invites: number };
 const EMPTY: VState = { consent: false, tiles: {}, handles: {}, channel: false, events: 0, quiz: "none", invites: 0 };
 const key = (uid: string) => `tbh-vision:${uid}`;
+export const GUEST = "guest";
 
-export function readVision(uid: string): VState {
+const parse = (raw: string | null): VState | null => {
+  if (!raw) return null;
   try {
-    return { ...EMPTY, ...JSON.parse(readPref(key(uid)) ?? "{}") };
+    const v = { ...EMPTY, ...JSON.parse(raw) } as VState;
+    if (v.channel) v.tiles = { ...v.tiles, whatsapp: "verified" }; // earlier "join the channel" action
+    return v;
   } catch {
-    return EMPTY;
+    return null;
   }
+};
+export function readVision(uid: string): VState {
+  const own = parse(readPref(key(uid)));
+  // Follows made before registering move into the new member account
+  if (uid !== GUEST && (!own || !Object.keys(own.tiles).length)) {
+    const guest = parse(readPref(key(GUEST)));
+    if (guest && Object.keys(guest.tiles).length) {
+      const merged = { ...(own ?? EMPTY), consent: guest.consent, tiles: guest.tiles, handles: guest.handles };
+      writePref(key(uid), JSON.stringify(merged));
+      writePref(key(GUEST), JSON.stringify(EMPTY));
+      return merged;
+    }
+  }
+  return own ?? EMPTY;
 }
 
 /** Points: verified social + bonus + other actions; pending is shown separately. Total counts up to 100. */
@@ -40,28 +61,29 @@ export function visionTotals(v: VState) {
     } else if (s === "checking") pending += p.points;
   }
   if (followed === vision.platforms.length) verified += vision.bonus.points;
-  const other = (v.channel ? 10 : 0) + Math.min(v.events, 2) * 15 + (v.quiz === "passed" ? 20 : 0) + Math.min(v.invites, 4) * 5;
+  const other = Math.min(v.events, 2) * 15 + (v.quiz === "passed" ? 20 : 0) + Math.min(v.invites, 4) * 5;
   const raw = verified + other;
   return { verified: Math.min(100, raw), pending: Math.min(pending, Math.max(0, 100 - Math.min(100, raw))), followed, extra: Math.max(0, raw - 100) };
 }
 export const levelFor = (n: number) => vision.levels.find((l) => n >= l.min && n <= l.max) ?? vision.levels[0];
 const strengthFor = (n: number) => (n >= 100 ? "Excellent" : n >= 75 ? "Very strong" : n >= 50 ? "Strong" : n >= 25 ? "Good" : "Fair");
 
-export function VisionMeter({ registerHref, eventsHref }: { registerHref: string; eventsHref: string }) {
+export function VisionMeter({ part, eventsHref, inviteRef }: { part: "follow" | "more"; eventsHref?: string; inviteRef?: string }) {
   const { ready, user } = useSession();
   const toast = useToast();
+  const uid = user?.id ?? GUEST;
   const [v, setV] = useState<VState>(EMPTY);
   const [proofFor, setProofFor] = useState<string | null>(null);
   const [quizOpen, setQuizOpen] = useState(false);
   useEffect(() => {
-    if (user) setV(readVision(user.id));
-  }, [user]);
+    if (ready) setV(readVision(uid));
+  }, [ready, uid]);
   const save = useCallback(
     (next: VState) => {
       setV(next);
-      if (user) writePref(key(user.id), JSON.stringify(next));
+      writePref(key(uid), JSON.stringify(next));
     },
-    [user],
+    [uid],
   );
 
   // Simulated review: "checking" tiles are verified a few seconds later
@@ -82,34 +104,89 @@ export function VisionMeter({ registerHref, eventsHref }: { registerHref: string
   }, [v, save, toast]);
 
   const tot = useMemo(() => visionTotals(v), [v]);
-
   if (!ready) return <div className="vm vm-loading" aria-busy="true" />;
-
-  if (!user)
-    return (
-      <div className="vm vm-sample">
-        <div className="vm-head">
-          <h3>{vision.panelTitle}</h3>
-          <p>{vision.panelText}</p>
-        </div>
-        <Meter verified={28} pending={10} />
-        <p className="vm-line">
-          <strong>Meter (live, sample):</strong> {vision.sampleMeter}
-        </p>
-        <p className="vm-line">
-          <strong>Application strength (sample):</strong> {vision.sampleStrength}
-        </p>
-        <p className="small muted">{vision.pendingNote}</p>
-        <Link href={registerHref} className="btn btn-primary">
-          Register free to start earning
-        </Link>
-      </div>
-    );
 
   const meterTotal = tot.verified + tot.pending;
   const level = levelFor(meterTotal);
   const nextLevel = vision.levels.find((l) => l.min > meterTotal);
   const follows = nextLevel ? Math.ceil((nextLevel.min - meterTotal) / 10) : 0;
+  const summary = (
+    <>
+      <Meter verified={tot.verified} pending={tot.pending} />
+      <p className="vm-line" aria-live="polite">
+        Your Vision Meter: <strong>{meterTotal} / 100</strong> · Level: <strong>{level.name}</strong> · {tot.followed} of {vision.platforms.length} accounts followed · {tot.pending} points pending
+      </p>
+      <p className="vm-line">
+        Application strength: <strong>{strengthFor(meterTotal)}</strong>
+        {nextLevel && follows > 0 ? ` · Tip: ${vision.copy.nudge(follows, nextLevel.name)}` : ` · ${level.message}`}
+      </p>
+      {tot.extra > 0 && <p className="small">+{tot.extra} points above 100 were added to your Impact Points.</p>}
+    </>
+  );
+
+  if (part === "more")
+    return (
+      <div className="vm">
+        <div className="vm-head">
+          <h3>Earn more Vision Points</h3>
+          <p>Your application is in. These count too, and they work without social media.</p>
+        </div>
+        {summary}
+        <ul className="vm-other" role="list">
+          <li>
+            <span>Attend a TBH One event or village meeting · +15 (up to 2)</span>
+            <span className="vm-state">
+              {Math.min(v.events, 2)} of 2 checked in · {eventsHref && <Link href={eventsHref}>Find an event</Link>}{" "}
+              {v.events < 2 && (
+                <button type="button" className="linklike small" onClick={() => save({ ...v, events: v.events + 1 })}>
+                  Demo: check in
+                </button>
+              )}
+            </span>
+          </li>
+          <li>
+            <span>Pass the Vision Quiz (8 of 10 correct) · +20</span>
+            {v.quiz === "passed" ? (
+              <span className="vm-state vm-ok">
+                <Check size={14} aria-hidden /> Passed
+              </span>
+            ) : v.quiz === "failed" ? (
+              <span className="vm-state">No retakes left</span>
+            ) : (
+              <button type="button" className="btn btn-sm btn-outline" onClick={() => setQuizOpen(true)}>
+                {v.quiz === "failed-once" ? "Retake the quiz (last try)" : "Take the quiz"}
+              </button>
+            )}
+          </li>
+          <li>
+            <span>Invite a friend who registers as a member · +5 (up to 4)</span>
+            <span className="vm-state">
+              {Math.min(v.invites, 4)} of 4 ·{" "}
+              <a href={`https://wa.me/?text=${encodeURIComponent(`Join TBH One free and lead your ward: https://${site.domain}/careers?ref=${inviteRef ?? uid}`)}`} target="_blank" rel="noopener">
+                Share your invite link
+              </a>{" "}
+              {v.invites < 4 && (
+                <button type="button" className="linklike small" onClick={() => save({ ...v, invites: v.invites + 1 })}>
+                  Demo: a friend registered
+                </button>
+              )}
+            </span>
+          </li>
+        </ul>
+        <p className="small muted">{vision.copy.fairness}</p>
+        {quizOpen && (
+          <Quiz
+            onClose={() => setQuizOpen(false)}
+            onDone={(score) => {
+              const passed = score >= 8;
+              save({ ...v, quiz: passed ? "passed" : v.quiz === "failed-once" ? "failed" : "failed-once" });
+              setQuizOpen(false);
+              toast(passed ? `You passed the Vision Quiz (${score}/10): +20 Vision Points.` : `You scored ${score}/10. You need 8 to pass.${v.quiz === "none" ? " You have one retake." : ""}`);
+            }}
+          />
+        )}
+      </div>
+    );
 
   return (
     <div className="vm">
@@ -117,15 +194,7 @@ export function VisionMeter({ registerHref, eventsHref }: { registerHref: string
         <h3>{vision.panelTitle}</h3>
         <p>{vision.panelText}</p>
       </div>
-      <Meter verified={tot.verified} pending={tot.pending} />
-      <p className="vm-line" aria-live="polite">
-        Your Vision Meter: <strong>{meterTotal} / 100</strong> · Level: <strong>{level.name}</strong> · {tot.followed} of {vision.platforms.length} platforms followed · {tot.pending} points pending
-      </p>
-      <p className="vm-line">
-        Application strength: <strong>{strengthFor(meterTotal)}</strong>
-        {nextLevel && follows > 0 ? ` · Tip: ${vision.copy.nudge(follows, nextLevel.name)}` : ` · ${level.message}`}
-      </p>
-      {tot.extra > 0 && <p className="small">+{tot.extra} points above 100 were added to your Impact Points.</p>}
+      {summary}
 
       <label className="vm-consent">
         <input type="checkbox" checked={v.consent} onChange={(e) => save(e.target.checked ? { ...v, consent: true } : { ...v, consent: false, tiles: {}, handles: {} })} />
@@ -152,9 +221,12 @@ export function VisionMeter({ registerHref, eventsHref }: { registerHref: string
                   href={url}
                   target="_blank"
                   rel="noopener"
-                  onClick={() => save({ ...v, tiles: { ...v.tiles, [p.key]: "followed" } })}
+                  onClick={() => {
+                    save({ ...v, tiles: { ...v.tiles, [p.key]: p.auto ? "verified" : "followed" } });
+                    if (p.auto) toast(`+${p.points} Vision Points! You joined the ${p.name}.`);
+                  }}
                 >
-                  Follow
+                  {p.auto ? "Join" : "Follow"}
                 </a>
               ) : s === "followed" || s === "unclear" ? (
                 <button type="button" className="btn btn-sm btn-outline" onClick={() => setProofFor(p.key)}>
@@ -166,7 +238,7 @@ export function VisionMeter({ registerHref, eventsHref }: { registerHref: string
                 </span>
               ) : (
                 <span className="vm-state vm-ok">
-                  <Check size={14} aria-hidden /> Verified · +{p.points} points
+                  <Check size={14} aria-hidden /> {p.auto ? "Joined" : "Verified"} · +{p.points} points
                 </span>
               )}
               {s === "unclear" && <p className="small vm-warn">{vision.tileStates[4][1]}</p>}
@@ -175,63 +247,7 @@ export function VisionMeter({ registerHref, eventsHref }: { registerHref: string
           );
         })}
       </ul>
-
-      <h4 className="vm-sub">Other ways to earn Vision Points (for everyone, up to 80)</h4>
-      <ul className="vm-other" role="list">
-        <li>
-          <span>Join the TBH One WhatsApp Channel · +10</span>
-          {v.channel ? (
-            <span className="vm-state vm-ok">
-              <Check size={14} aria-hidden /> Joined
-            </span>
-          ) : (
-            <a className="btn btn-sm btn-outline" href={waLink("JOIN CHANNEL")} target="_blank" rel="noopener" onClick={() => save({ ...v, channel: true })}>
-              Join the Channel
-            </a>
-          )}
-        </li>
-        <li>
-          <span>Attend a TBH One event or village meeting · +15 (up to 2)</span>
-          <span className="vm-state">
-            {Math.min(v.events, 2)} of 2 checked in · <Link href={eventsHref}>Find an event</Link>{" "}
-            {v.events < 2 && (
-              <button type="button" className="linklike small" onClick={() => save({ ...v, events: v.events + 1 })}>
-                Demo: check in
-              </button>
-            )}
-          </span>
-        </li>
-        <li>
-          <span>Pass the Vision Quiz (8 of 10 correct) · +20</span>
-          {v.quiz === "passed" ? (
-            <span className="vm-state vm-ok">
-              <Check size={14} aria-hidden /> Passed
-            </span>
-          ) : v.quiz === "failed" ? (
-            <span className="vm-state">No retakes left</span>
-          ) : (
-            <button type="button" className="btn btn-sm btn-outline" onClick={() => setQuizOpen(true)}>
-              {v.quiz === "failed-once" ? "Retake the quiz (last try)" : "Take the quiz"}
-            </button>
-          )}
-        </li>
-        <li>
-          <span>Invite a friend who registers as a member · +5 (up to 4)</span>
-          <span className="vm-state">
-            {Math.min(v.invites, 4)} of 4 ·{" "}
-            <a href={`https://wa.me/?text=${encodeURIComponent(`Join TBH One free and lead your ward: https://${site.domain}/careers?ref=${user.id}`)}`} target="_blank" rel="noopener">
-              Share your invite link
-            </a>{" "}
-            {v.invites < 4 && (
-              <button type="button" className="linklike small" onClick={() => save({ ...v, invites: v.invites + 1 })}>
-                Demo: a friend registered
-              </button>
-            )}
-          </span>
-        </li>
-      </ul>
       <p className="small muted">{vision.copy.offline}</p>
-      <p className="small muted">{vision.copy.fairness}</p>
 
       {proofFor && (
         <ProofForm
@@ -242,18 +258,7 @@ export function VisionMeter({ registerHref, eventsHref }: { registerHref: string
             const p = vision.platforms.find((x) => x.key === proofFor)!;
             save({ ...v, handles: { ...v.handles, [proofFor]: handle }, tiles: { ...v.tiles, [proofFor]: unclear ? "unclear" : "checking" } });
             setProofFor(null);
-            toast(unclear ? vision.tileStates[4][1] : `Thanks, ${user.firstName}! Your ${p.name} follow is being checked. +${p.points} pending points are on your Vision Meter.`);
-          }}
-        />
-      )}
-      {quizOpen && (
-        <Quiz
-          onClose={() => setQuizOpen(false)}
-          onDone={(score) => {
-            const passed = score >= 8;
-            save({ ...v, quiz: passed ? "passed" : v.quiz === "failed-once" ? "failed" : "failed-once" });
-            setQuizOpen(false);
-            toast(passed ? `You passed the Vision Quiz (${score}/10): +20 Vision Points.` : `You scored ${score}/10. You need 8 to pass.${v.quiz === "none" ? " You have one retake." : ""}`);
+            toast(unclear ? vision.tileStates[4][1] : `Thanks${user ? `, ${user.firstName}` : ""}! Your ${p.name} follow is being checked. +${p.points} pending points are on your Vision Meter.`);
           }}
         />
       )}

@@ -7,7 +7,7 @@ import { href } from "@/lib/i18n";
 import { localeOf, metaFor } from "@/components/participate/pageKit";
 import { PageHeader, Section } from "@/components/ui/Page";
 import { WardCounter } from "@/components/careers/Recruitment";
-import { hubRoles, WAVE, whyRegister } from "@/data/careers";
+import { contactLine, hubNote, hubRoles, WAVE, whyRegister } from "@/data/careers";
 
 export const generateStaticParams = localeParams;
 export const generateMetadata = metaFor(
@@ -40,6 +40,7 @@ export default async function CareersHub({ params }: { params: Promise<{ lang: s
                 <Icon size={26} aria-hidden />
                 <div>
                   <h3>{r.role}</h3>
+                  <p className="small">{r.places}</p>
                   <p className={`chip ${open ? "chip-ok" : "chip-soon"}`}>{r.status}</p>
                 </div>
                 <Link href={L(r.path)} className={`btn ${i === 0 ? "btn-primary" : "btn-outline"}`}>
@@ -50,7 +51,7 @@ export default async function CareersHub({ params }: { params: Promise<{ lang: s
           })}
         </ul>
         <p className="ch-note">
-          <strong>Every role requires free member registration first.</strong> <Link href={L("/join")}>Register free</Link>
+          <strong>{hubNote}</strong> <Link href={L("/join")}>Register free</Link>
         </p>
       </Section>
       <Section alt title="Ward leaders: wave 1" intro="One ward leader for each ward. Closes 30 November 2026 or when every ward is filled.">
@@ -65,6 +66,9 @@ export default async function CareersHub({ params }: { params: Promise<{ lang: s
             </Link>
           </div>
         </div>
+        <p className="small muted ap-contact">
+          {contactLine.tollFree} · {contactLine.whatsapp} · {contactLine.email}
+        </p>
       </Section>
     </>
   );

@@ -21,17 +21,18 @@ export const site = {
   /** Public web address shown on the site, in SMS copy and on leader IDs (Careers Landing Page document). */
   domain: "www.tbhone.com.ng",
   // Official channels. WhatsApp, toll-free line and social handles from the Careers Landing Page: Ward Leaders
-  // (Wave 1) document; the digital lead registers each handle before launch (CAR-36). Email and address stay pending.
+  // (Wave 1) document; the digital lead registers each handle before launch (CAR-36). Email from the updated Careers
+  // page copy; the postal address stays pending.
   contact: {
     whatsappNumber: "2349045699268" as string | null, // E.164 without "+": 0904 569 9268
     whatsappDisplay: "0904 569 9268",
     tollFree: "0800 555 333 111" as string | null, // free, 24 hours
     tollFreeTel: "0800555333111",
-    email: null as string | null,
+    email: "info@tbhone.com.ng" as string | null,
     pressEmail: null as string | null,
     address: null as string | null,
   },
-  /** Official accounts: the confirmed @tbhonenigeria handle on all 11 platforms (Careers document, Vision Points). */
+  /** Official accounts: the confirmed @tbhonenigeria handle on all 13 channels (11 platforms + Telegram + WhatsApp Channel) (Careers document, Vision Points). */
   handle: "@tbhonenigeria",
   social: {
     instagram: "https://www.instagram.com/tbhonenigeria" as string | null,
@@ -45,6 +46,10 @@ export const site = {
     snapchat: "https://www.snapchat.com/add/tbhonenigeria" as string | null,
     substack: "https://tbhonenigeria.substack.com" as string | null,
     pinterest: "https://www.pinterest.com/tbhonenigeria" as string | null,
+    // Telegram channel on the same handle. WhatsApp Channel: until its channel link is issued, the button opens a
+    // chat with the official number asking to join (replace with the https://whatsapp.com/channel/… link).
+    telegram: "https://t.me/tbhonenigeria" as string | null,
+    whatsapp: "https://wa.me/2349045699268?text=JOIN%20CHANNEL" as string | null,
   },
   apps: {
     android: null as string | null,
@@ -93,4 +98,6 @@ export const socialLabels: Record<keyof typeof site.social, string> = {
   snapchat: "Snapchat",
   substack: "Substack",
   pinterest: "Pinterest",
+  telegram: "Telegram",
+  whatsapp: "WhatsApp Channel",
 };

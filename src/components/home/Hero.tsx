@@ -41,13 +41,13 @@ export function Hero({ t, locale, joinHref, fundHref, candidatesHref }: { t: Dic
 
   const cur = TAGLINES[i];
   return (
-    <section className="hero pattern band-green" aria-labelledby="hero-title">
+    <section className="hero hero-white" aria-labelledby="hero-title">
       <div className="container hero-grid">
         <div className="hero-main">
           <h1 id="hero-title" className="hero-h1">
             {t.hero.title}
           </h1>
-          <div className="bubble hero-bubble" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
+          <div className="bubble hero-bubble band-green" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
             <p className="hero-tagline" lang={HTML_LANG[cur.lang]} key={cur.lang} aria-live="off">
               {cur.parts.map(([w, heavy], k) => (heavy ? <strong key={k}>{w}</strong> : <span key={k}>{w}</span>))}
             </p>
@@ -98,7 +98,7 @@ export function Hero({ t, locale, joinHref, fundHref, candidatesHref }: { t: Dic
               </p>
             </div>
           </Link>
-          <div className="countdown" role="timer" aria-live="off" aria-label={`${t.hero.countdown}: ${t.hero.electionDate}`}>
+          <div className="countdown band-green" role="timer" aria-live="off" aria-label={`${t.hero.countdown}: ${t.hero.electionDate}`}>
             <p className="countdown-label">{t.hero.countdown}</p>
             <div className="countdown-nums">
               <span>

@@ -197,7 +197,7 @@ await check("Careers: ward finder works offline (Kawo), apply link opens with th
   await page.locator(".wf-result, main").filter({ hasText: /Kawo/ }).first().waitFor();
   await page.locator("main a[href*='ward=']").filter({ visible: true }).first().click();
   await page.waitForURL(/careers__ward-leaders__apply\.html/);
-  await page.locator("main").filter({ hasText: /Register free to apply/ }).first().waitFor();
+  await page.locator("main").filter({ hasText: /Start here: follow TBH One/ }).first().waitFor();
   const applyUrl = here(page) + (page.url().includes("ward=") ? " (ward kept)" : " (NO ward)");
   await page.goto(root + "pages/en__ward-leaders.html");
   await page.waitForURL(/en__careers__ward-leaders\.html/);

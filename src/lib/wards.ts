@@ -161,7 +161,9 @@ export type Application = {
   userId: string;
   ward: FoundWard;
   at: string;
-  endorser: { name: string; role: string; phone: string };
+  /** Collected by the state team on the verification call, not in the application */
+  endorser?: { name: string; role: string; phone: string };
+  hours?: string;
   stage: number; // index in the progress tracker (1 = applied)
   vision: number;
 };

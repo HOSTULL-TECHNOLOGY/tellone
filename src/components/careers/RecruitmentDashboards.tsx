@@ -17,7 +17,7 @@ const FUNNEL = [
   { label: "Visited the careers pages", value: VISITS },
   { label: "Registered as members (target 25%)", value: Math.round(VISITS * 0.262) },
   { label: "Completed the application (target 30%)", value: Math.round(VISITS * 0.262 * 0.31) },
-  { label: "Endorsed and verified in 3 working days (target 90%)", value: 4_212 },
+  { label: "Shortlisted and verified on the call in 3 working days (target 90%)", value: 4_212 },
   { label: "Approved and trained (target 85%)", value: WAVE.filledSample },
   { label: "Recruited 10+ street leaders in 14 days (target 80%)", value: 1_018 },
 ];
@@ -34,7 +34,7 @@ const SOURCES = [
 const MEASURES: [string, string, string][] = [
   ["Visitors who register as members", "25%", "26.2%"],
   ["Registered members who complete the application", "30%", "31%"],
-  ["Applications endorsed and verified within 3 working days", "90%", "88%"],
+  ["Applications shortlisted and verified on the call within 3 working days", "90%", "88%"],
   ["Approved applicants who finish training", "85%", "86%"],
   ["New ward leaders who recruit at least 10 street leaders within 14 days", "80%", "32% (first leaders started 16 Nov)"],
   ["Wards with a leader by 30 November 2026", "8,809", "3,154"],
@@ -130,14 +130,14 @@ export function NationalRecruitment() {
   );
 }
 
-type Applicant = { ref: string; name: string; ward: string; lga: string; at: string; days: number; parts: [number, number, number, number, number]; endorsed: boolean; verified: boolean; status: "Awaiting endorser" | "In review" | "Approved" | "Waiting list" };
+type Applicant = { ref: string; name: string; ward: string; lga: string; at: string; days: number; parts: [number, number, number, number, number]; endorsed: boolean; verified: boolean; status: "New" | "In review" | "Selected" | "Waiting list" };
 const DEMO_APPLICANTS: Applicant[] = [
-  { ref: "TBH-WL-00287", name: "Chinedu Okafor", ward: "Unguwan Sarki", lga: "Kaduna North", at: "10 Nov", days: 2, parts: [26, 21, 8, 13, 10], endorsed: false, verified: true, status: "Awaiting endorser" },
+  { ref: "TBH-WL-00287", name: "Chinedu Okafor", ward: "Unguwan Sarki", lga: "Kaduna North", at: "10 Nov", days: 2, parts: [26, 21, 8, 13, 10], endorsed: false, verified: true, status: "New" },
   { ref: "TBH-WL-00301", name: "Aisha Lawal", ward: "Unguwan Sarki", lga: "Kaduna North", at: "10 Nov", days: 2, parts: [28, 22, 16, 14, 10], endorsed: true, verified: true, status: "In review" },
-  { ref: "TBH-WL-00118", name: "Joseph Danladi", ward: "Kawo", lga: "Kaduna North", at: "9 Nov", days: 3, parts: [24, 20, 12, 12, 10], endorsed: true, verified: true, status: "Approved" },
+  { ref: "TBH-WL-00118", name: "Joseph Danladi", ward: "Kawo", lga: "Kaduna North", at: "9 Nov", days: 3, parts: [24, 20, 12, 12, 10], endorsed: true, verified: true, status: "Selected" },
   { ref: "TBH-WL-00342", name: "Hauwa Musa", ward: "Badarawa", lga: "Kaduna North", at: "11 Nov", days: 1, parts: [27, 23, 18, 15, 10], endorsed: true, verified: true, status: "In review" },
   { ref: "TBH-WL-00355", name: "Samuel Bako", ward: "Badarawa", lga: "Kaduna North", at: "11 Nov", days: 1, parts: [22, 18, 6, 11, 8], endorsed: true, verified: false, status: "In review" },
-  { ref: "TBH-WL-00377", name: "Fatima Sani", ward: "Barnawa", lga: "Kaduna South", at: "12 Nov", days: 0, parts: [25, 19, 10, 13, 10], endorsed: false, verified: true, status: "Awaiting endorser" },
+  { ref: "TBH-WL-00377", name: "Fatima Sani", ward: "Barnawa", lga: "Kaduna South", at: "12 Nov", days: 0, parts: [25, 19, 10, 13, 10], endorsed: false, verified: true, status: "New" },
 ];
 const PARTS = vision.score.map(([l]) => l.split(" (")[0]);
 
@@ -146,7 +146,7 @@ export function StateApplicants() {
   const [list, setList] = useState<Applicant[]>(DEMO_APPLICANTS);
   useEffect(() => {
     // Applications made in this browser join the queue
-    const mine: Applicant[] = readApplications().map((a) => ({ ref: a.ref, name: "You (this browser)", ward: a.ward.name, lga: a.ward.lga, at: new Date(a.at).toLocaleDateString("en-GB", { day: "numeric", month: "short" }), days: 0, parts: [22, 18, Math.round(a.vision / 5), 12, 10], endorsed: a.stage > 2, verified: true, status: "Awaiting endorser" }));
+    const mine: Applicant[] = readApplications().map((a) => ({ ref: a.ref, name: "You (this browser)", ward: a.ward.name, lga: a.ward.lga, at: new Date(a.at).toLocaleDateString("en-GB", { day: "numeric", month: "short" }), days: 0, parts: [22, 18, Math.round(a.vision / 5), 12, 10], endorsed: a.stage > 2, verified: true, status: "New" }));
     setList((l) => [...mine.filter((m) => !l.some((x) => x.ref === m.ref)), ...l]);
   }, []);
   const total = (a: Applicant) => a.parts.reduce((s, n) => s + n, 0);
@@ -165,7 +165,7 @@ export function StateApplicants() {
     <>
       <Panel title="Ward leader applicants (ST-5)">
         <p className="small muted">
-          Eligibility is pass or fail: 18+, lives in the ward, valid ID, endorser confirmed. Everyone who passes is scored out of 100. A sole applicant is approved once verified and endorsed; with several, scores are compared 7 days after the first application or at the close of wave 1, and ties go to the earliest verified application.
+          Applicants are scored out of 100 from their application. The application no longer asks for ID, endorser or payment details: the state team checks those on a verification call with the selected candidate before approval. A sole applicant is shortlisted straight away; with several, scores are compared 7 days after the first application or at the close of wave 1, and ties go to the earliest verified application.
         </p>
         <div className="table-wrap">
           <table className="ofc-table">
@@ -213,19 +213,13 @@ export function StateApplicants() {
                     <strong>{total(a)}</strong>
                   </td>
                   <td>
-                    <Badge tone={a.status === "Approved" ? "ok" : a.status === "Waiting list" ? "muted" : a.status === "In review" ? "info" : "warn"}>{a.status}</Badge>
-                    {!a.verified && (
-                      <>
-                        <br />
-                        <span className="small muted">ID check pending</span>
-                      </>
-                    )}
+                    <Badge tone={a.status === "Selected" ? "ok" : a.status === "Waiting list" ? "muted" : a.status === "In review" ? "info" : "warn"}>{a.status}</Badge>
                   </td>
                   <td>
                     <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}>
-                      {a.status !== "Approved" && a.endorsed && a.verified && due(a) && (!contested(a) || best(a)) && (
-                        <button type="button" className="btn btn-sm btn-primary" onClick={() => setStatus(a.ref, "Approved", `${a.name} approved: training link sent by SMS.`)}>
-                          Approve
+                      {a.status !== "Selected" && due(a) && (!contested(a) || best(a)) && (
+                        <button type="button" className="btn btn-sm btn-primary" onClick={() => setStatus(a.ref, "Selected", `${a.name} shortlisted: verification call booked (ID, endorser and payment details). Training link follows once checked.`)}>
+                          Select
                         </button>
                       )}
                       {contested(a) && !due(a) && best(a) && (
@@ -238,7 +232,7 @@ export function StateApplicants() {
                           Waiting list
                         </button>
                       )}
-                      <button type="button" className="btn btn-sm btn-ghost" onClick={() => toast(`Application ${a.ref} moved to Kawo ward; SMS sent to the applicant and the endorser.`)}>
+                      <button type="button" className="btn btn-sm btn-ghost" onClick={() => toast(`Application ${a.ref} moved to Kawo ward; SMS sent to the applicant.`)}>
                         Move ward
                       </button>
                     </div>

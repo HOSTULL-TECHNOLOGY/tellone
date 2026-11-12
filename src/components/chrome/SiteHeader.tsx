@@ -18,6 +18,17 @@ export function SiteHeader({ locale, t, logo, player }: { locale: Locale; t: Dic
   const [openKey, setOpenKey] = useState<string | null>(null);
   const [drawer, setDrawer] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  // The top bar, the menu and the song player all stay at the top: the header sticks just below the top bar,
+  // whose height changes when its buttons wrap on small phones.
+  useEffect(() => {
+    const bar = document.querySelector<HTMLElement>(".topbar");
+    if (!bar) return;
+    const set = () => document.documentElement.style.setProperty("--topbar-h", `${bar.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(bar);
+    return () => ro.disconnect();
+  }, []);
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const hoverTimer = useRef<number | null>(null);

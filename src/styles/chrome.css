@@ -1,5 +1,5 @@
 /* ==================================================================== Top bar */
-.topbar { background: var(--paper); border-bottom: 1px solid var(--surface); font-size: var(--step--1); position: relative; z-index: 60; }
+.topbar { background: var(--paper); border-bottom: 1px solid var(--surface); font-size: var(--step--1); position: sticky; top: 0; z-index: 60; }
 .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); min-height: 48px; }
 .topbar-left, .topbar-right { display: flex; align-items: center; gap: 2px; min-width: 0; }
 .topbar-btn {
@@ -67,7 +67,7 @@
 @media (max-width: 767px) { .ticker-lead { display: none; } }
 
 /* ==================================================================== Header */
-.site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: saturate(1.4) blur(8px); border-bottom: 1px solid transparent; transition: border-color 150ms var(--ease), box-shadow 150ms var(--ease); }
+.site-header { position: sticky; top: var(--topbar-h, 49px); z-index: 50; background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: saturate(1.4) blur(8px); border-bottom: 1px solid transparent; transition: border-color 150ms var(--ease), box-shadow 150ms var(--ease); }
 .site-header.is-scrolled { border-bottom-color: var(--line); box-shadow: 0 1px 0 var(--line); }
 .header-row { display: flex; align-items: center; gap: var(--s4); min-height: var(--header-h); }
 .logo { display: inline-flex; flex: none; border-radius: 4px; }
@@ -186,9 +186,9 @@ a.main-nav-btn { text-decoration: none; }
 /* ==================================================================== Quick actions */
 .quick { position: fixed; z-index: 40; }
 .quick ul { list-style: none; display: flex; }
-.quick a { display: grid; justify-items: center; gap: 2px; text-decoration: none; color: #0f4d02; font-size: 0.75rem; font-weight: 650; transition: background 150ms var(--ease), color 150ms var(--ease); }
-.quick a svg { color: #d40000; transition: color 150ms var(--ease); }
-.quick a:hover { color: #ffffff; background: #d40000; }
+.quick a { display: grid; justify-items: center; gap: 2px; text-decoration: none; color: #4b5057; font-size: 0.75rem; font-weight: 650; transition: background 150ms var(--ease), color 150ms var(--ease); }
+.quick a svg { color: #6b7078; transition: color 150ms var(--ease); }
+.quick a:hover { color: #ffffff; background: #4b5057; }
 .quick a:hover svg { color: #ffffff; }
 @media (max-width: 1023px) {
   .quick { left: 0; right: 0; bottom: 0; background: #ffffff; border-top: 1px solid #dfe3d6; box-shadow: 0 -6px 18px -10px rgb(0 0 0 / 0.3); padding-bottom: env(safe-area-inset-bottom); }

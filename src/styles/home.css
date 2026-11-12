@@ -429,7 +429,7 @@
 .reach-select { display: block; margin-top: var(--s3); }
 .reach-select select { width: 100%; min-height: 44px; border-radius: 10px; border: 1px solid #c9cfbd; background: #ffffff; color: #1b1a16; padding: 8px 12px; font: inherit; }
 .reach-panel { position: relative; display: grid; border-radius: 18px; background: #f6f7f2; border: 1px solid #dfe3d6; min-height: 380px; align-content: start; overflow: hidden; color: #1b1a16; }
-@media (min-width: 1000px) { .reach-panel { position: sticky; top: calc(var(--header-h) + 80px); } }
+@media (min-width: 1000px) { .reach-panel { position: sticky; top: calc(var(--topbar-h, 49px) + var(--header-h) + 80px); } }
 .reach-panel-head { padding: var(--s6) var(--s6) var(--s5); background: linear-gradient(135deg, #e6f2df, #f6f7f2); border-bottom: 1px solid #dfe3d6; }
 .reach-panel-head h3 { font-family: var(--font-text); font-weight: 800; font-size: var(--step-3); color: #0f4d02; }
 .reach-panel-head p { color: #5b5b52; margin-top: 4px; font-size: var(--step--1); }
@@ -466,3 +466,7 @@
 @media (prefers-reduced-motion: no-preference) { .belief-photo-inset { animation: app-float 6s ease-in-out infinite; } }
 .tbh-kicker { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--signal-red-text, #b00000); margin-bottom: -6px; }
 
+
+/* Hero on white (the tagline bubble stays dark green) */
+.hero-white { background: #ffffff; border-bottom: 1px solid var(--line); }
+:root[data-theme="dark"] .hero-white { background: var(--paper); }

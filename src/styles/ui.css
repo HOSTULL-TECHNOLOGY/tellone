@@ -6,6 +6,12 @@
 
 /* Page header */
 .page-head { padding-block: var(--s5) var(--s7); border-bottom: 0; }
+/* Sub-page heads sit on white; the small boxes inside (quick answer, side panel) stay green */
+.page-head-white { background: #ffffff; border-bottom: 1px solid var(--line); }
+:root[data-theme="dark"] .page-head-white { background: var(--paper); }
+.page-head-white h1 { color: var(--brand-green-deep); }
+.page-head-white .quick-answer { border-left-color: #a3de8b; border-radius: var(--r-panel); }
+.page-aside.band-green { padding: var(--s4); border-radius: 18px; }
 .page-head-grid { display: grid; gap: var(--s6); margin-top: var(--s5); }
 @media (min-width: 1024px) { .page-head-grid.has-aside { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; } }
 .page-head h1 { font-size: var(--step-5); max-width: 22ch; }
@@ -198,7 +204,7 @@ fieldset.plain legend { font-weight: 650; margin-bottom: var(--s2); }
 /* Split layouts */
 .split { display: grid; gap: var(--s6); }
 @media (min-width: 1024px) { .split { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; } .split-even { grid-template-columns: 1fr 1fr; } }
-.sticky-side { position: sticky; top: calc(var(--header-h) + 24px); }
+.sticky-side { position: sticky; top: calc(var(--topbar-h, 49px) + var(--header-h) + 24px); }
 
 /* Media frames */
 .ratio-16x9 { aspect-ratio: 16 / 9; }

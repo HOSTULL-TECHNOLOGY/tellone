@@ -1,6 +1,8 @@
 # Careers: Ward Leaders (Wave 1): implementation notes
 
-Source: *TBH One: Careers Landing Page: Ward Leaders (Wave 1)*, 23 Oct 2026. All page copy is in `src/data/careers.ts`, word for word from the document.
+Source: *TBH One: Careers Landing Page: Ward Leaders (Wave 1)*, 23 Oct 2026, and the updated publish-ready *Career Page content* (17 sections and a microcopy library). All page copy is in `src/data/careers.ts`.
+
+Application order (client request): 1 Follow us (Vision Points tiles) → 2 Register → 3 Apply (ward, about you, community standing, availability of 2 or 4 hours a day, pledge) → 4 Boost more (events, quiz, invites). ID, endorser and payment details are checked by the state team on a call with the selected candidate, not collected in the form.
 
 This is a front-end prototype with no backend. "Prototype" in the table below means the screen and the rules are built, but the data is demo data or is saved in this browser only. The production service still has to be connected.
 
@@ -50,7 +52,7 @@ This is a front-end prototype with no backend. "Prototype" in the table below me
 | CAR-25 | Move an application to another ward | Demo action in the state queue |
 | CAR-26 | Vision Points engine, capped at 100, excess to Impact Points | Client-side engine built |
 | CAR-27 | Live Vision Meter | Built on the careers page |
-| CAR-28 | 11 platform tiles with deep links | Built (`@tbhonenigeria` on every platform, as the document gives it) |
+| CAR-28 | 11 platform tiles with deep links | Built as 13 tiles: the 11 platforms plus WhatsApp Channel and Telegram (client request). `@tbhonenigeria` on every platform; the WhatsApp Channel link is pending, so its button opens a chat with 0904 569 9268 |
 | CAR-29 | Screenshot proof, then pending, then verified | Simulated |
 | CAR-30 | Re-verification and audits | Backend work |
 | CAR-31 | Route without social media (80 points) | Built |
