@@ -138,7 +138,7 @@ export const finder = {
     "State coordinators check every ward in their state before launch, and every “This ward looks wrong” report is fixed within a week.",
   ],
   safeguards: [
-    "The applicant confirms “I live in this ward”, the endorser confirms it again, and the state team checks it before approval.",
+    "The applicant confirms “I live in this ward”, and the state team checks it with the applicant and their endorser on the verification call before approval.",
     "The location is used once, kept only if the person applies, and never shared.",
     "No PVC, polling-unit or voting data is used or asked for.",
   ],
@@ -208,7 +208,7 @@ export const vision = {
     ["Complete, verified application", 10],
   ] as [string, number][],
   chooseRules: [
-    "If only one person applies for a ward, they are approved as soon as verification and endorsement are complete.",
+    "If only one person applies for a ward, they are approved as soon as the state team has verified them on a short call (ID, endorser and payment details).",
     "If more than one person applies, we compare scores after 7 days from the first application, or at the close of wave 1. The highest score gets the place; ties go to the earliest verified application.",
     "Everyone else is offered the waiting list for a second-leader place in wave 2, and a street leader place from 23 November.",
     "Vision Points can help you but never decide alone: they are one fifth of the score. They don’t guarantee a place.",
@@ -273,9 +273,9 @@ export const earnings = [
 export const months = {
   title: "What a month could look like (examples only, not promises)",
   tiers: [
-    { key: "starter", name: "Starter", hours: "5–8 hours a week", total: "₦35,000" },
-    { key: "active", name: "Active", hours: "9–15 hours a week", total: "₦122,500" },
-    { key: "committed", name: "Committed", hours: "16+ hours a week", total: "₦299,000" },
+    { key: "starter", name: "Starter", hours: "2 hours a day, a few days a week", total: "₦35,000" },
+    { key: "active", name: "Active", hours: "2 hours a day", total: "₦122,500" },
+    { key: "committed", name: "Committed", hours: "4 hours a day", total: "₦299,000" },
   ],
   rows: [
     ["Village meetings", "2 → ₦10,000", "4 → ₦20,000", "4 → ₦20,000"],
@@ -316,7 +316,7 @@ export const week = {
 export const first30 = {
   h2: "Your first 30 days",
   rows: [
-    ["Days 1–3", "Get endorsed and verified", "Decision message and your training link"],
+    ["Days 1–3", "Get shortlisted and verified on a short call with the state team (ID, endorser and payment details)", "Decision message and your training link"],
     ["Days 4–7", "Complete the 2-hour ward leader training", "Your TBH One certificate and verified leader ID"],
     ["Week 2", "Map your streets and recruit your first ten street leaders", "Dashboard with your ward overview and street leader roster"],
     ["Week 3", "Host your first village meeting", "First fee: ₦5,000"],
@@ -374,7 +374,7 @@ export const stepsTitle = "Five steps. About fifteen minutes. No cost.";
 export const steps = [
   { step: "1. Register free", what: "Join TBH One as a member with your phone number", time: "2 minutes" },
   { step: "2. Apply", what: "Complete the ward leader application inside your member account", time: "10 minutes" },
-  { step: "3. Get endorsed and verified", what: "A recognised local figure confirms you, the state team checks your ID and holds a short call with you", time: "Within 3 working days" },
+  { step: "3. Get shortlisted and verified", what: "The state team reviews your application, then holds a short call with you to check your ID, your endorser and your payment details", time: "Within 3 working days" },
   { step: "4. Train", what: "Complete the ward leader training, online or at your state session", time: "2 hours" },
   { step: "5. Start leading", what: "Receive your leader ID and dashboard and begin recruiting street leaders", time: "From 16 November" },
   { step: "Optional boost", what: "Follow our official accounts and take other simple actions to earn Vision Points", time: "5 to 15 minutes" },
@@ -412,7 +412,7 @@ export const regionsPage = {
   intro: "Wave 1 has one place for every ward, 8,809 in all. Here is where places are filled and where they are still open (sample figures, refreshed every 60 seconds on the live page).",
   decidedTitle: "How places are decided",
   decided: [
-    "If only one person applies for your ward, you are approved as soon as your endorsement and ID check are complete.",
+    "If only one person applies for your ward, you are approved as soon as the state team has verified you on a short call (ID, endorser and payment details).",
     "If more than one person applies, we compare scores after 7 days from the first application, or at the close of wave 1. The highest score gets the place.",
     "If your ward goes to someone else, you join the waiting list for a second-leader place in wave 2, and you are first in line for street leader recruitment from Monday 23 November.",
   ],
@@ -442,9 +442,9 @@ export const lookingFor = {
     "To live in the ward you will lead",
     "To be respected where you live",
     "An Android phone (version 8 or later), an iPhone or a laptop",
-    "A bank or mobile-money account in your name",
+    "A bank or mobile-money account in your name (checked on the call, not in the form)",
     "A valid ID: NIN slip, driver's licence, international passport or national ID card",
-    "An endorsement from a recognised local figure: a traditional ruler or village head, religious leader, association chairperson or NDC ward officer",
+    "An endorsement from a recognised local figure: a traditional ruler or village head, religious leader, association chairperson or NDC ward officer (the state team asks for it on your verification call)",
     "Willingness to sign the Code of Conduct and complete our training",
   ],
   dontNeed: [
@@ -487,12 +487,12 @@ export const faq: { q: string; a: string }[] = [
   { q: "Is this a salary or a government job?", a: "No. It is task-based work. You earn fees for each meeting, project, ad campaign, order and task you deliver." },
   { q: "How much can I earn?", a: "It depends on the work in your ward and the time you give. Our examples show about ₦35,000 for a light month, ₦122,500 for an active month and ₦299,000 for a committed month. They are examples, not promises." },
   { q: "When do I get paid?", a: "Within 24 hours of your state team approving your claim, to your bank or mobile-money account." },
-  { q: "Who endorses me?", a: "A recognised local figure, such as a traditional ruler or village head, religious leader, association chairperson or NDC ward officer. If you don't have one, apply anyway and the state team will help you connect." },
+  { q: "Who endorses me?", a: "A recognised local figure, such as a traditional ruler or village head, religious leader, association chairperson or NDC ward officer. You don't name them in the application: if you are selected, the state team asks for their details on your verification call. If you don't have one, apply anyway and the state team will help you connect." },
   { q: "I don't know my ward. What do I do?", a: `Use the ward finder at the top of the page, or send your location pin to ${site.contact.whatsappDisplay} on WhatsApp.` },
   { q: "What if my ward already has a leader?", a: "Join the waiting list for a second-leader place in wave 2, or become a street leader when recruitment opens on 23 November." },
   { q: "I want to be a street leader. When can I apply?", a: "Street leader places open on Monday 23 November 2026. Register now and join the waiting list so you are first in line." },
   { q: "Do I have to follow you on social media?", a: "No. It is optional. You can still reach 80 out of 100 Vision Points without any social media." },
-  { q: "How many hours a week will it take?", a: "Most ward leaders give 5 to 15 hours a week and choose their own schedule." },
+  { q: "How much time will it take?", a: "You choose 2 or 4 hours a day when you apply, and you set your own schedule around work, study or family." },
   { q: "Do I need to tell you who I will vote for?", a: "No. We never ask how you plan to vote or for your PVC number." },
   { q: "What if I live abroad?", a: "Ward leader places are for people living in the ward in Nigeria. Join your country's diaspora chapter instead." },
   { q: "How do I know this is real?", a: `Check Verify Official Channels at ${site.domain}/verify, or call ${site.contact.tollFree} free.` },
