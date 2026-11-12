@@ -20,10 +20,9 @@ Keep the folder together: index.html needs the "pages" and "assets" folders besi
 WHAT IS INSIDE
 --------------
   index.html   Start here. It opens pages/index.html, the homepage.
-  pages/       5,111 pages:
-                 - English (995 pages);
-                 - Pidgin, Yoruba, Hausa and Igbo (996 each);
-                 - the 16 dashboards (130 pages);
+  pages/       5,138 pages:
+                 - English, Pidgin, Yoruba, Hausa and Igbo versions of every public page;
+                 - the 16 dashboards (131 pages);
                  - the homepage and a "page not found" page.
                Pages are named after their address. For example, en__shop__merch.html is /shop/merch.
   assets/      Everything the pages use:
@@ -60,6 +59,15 @@ THINGS TO TRY
 - Projects: swipe or use the arrows to move through all the projects.
 - The app: the homepage and the "Get the App" page show the design of the TBH One mobile app.
 - Register pop-up: after 15 seconds, or halfway down a page, an invitation to register appears once a week.
+- Ward Leaders careers (side menu: Get Involved, then Ward Leaders, or the red band on the homepage):
+    - find your ward: type a place such as "Kawo market", pick from the State, LGA and ward lists, or use
+      your location (the browser asks for permission);
+    - confirm the ward, then "Register Free and Apply": register with any phone number and code 123456,
+      then fill in the application. The confirmation shows your reference and the progress tracker;
+    - Vision Meter: after registering, follow the platforms, upload a screenshot as proof and watch the
+      points become verified;
+    - Dashboards: Member > Apply shows your application. National team > Ward leader recruitment shows the
+      funnel. State coordinator > Ward leader applicants shows the scoring queue.
 - Staying signed in: after signing in, go back to the website. The top bar shows your name, with links to your
   dashboard and to Sign out.
 
@@ -77,6 +85,9 @@ This is a frontend prototype. There is no server or database behind it.
 - Nothing is sent: no text messages, emails, WhatsApp messages or payments. Every confirmation is simulated.
 - AI assistant ("Talk to Us"): it answers from a fixed set of approved answers. The live AI needs the full project running on a server with an API key.
 - Not yet available: the WhatsApp sign-in and WhatsApp support line, the live social feeds and the TV stream. They wait for official accounts and are marked as such on the site.
+- Ward finder: "Use my location" needs the browser's permission, and some browsers block location for files
+  opened from disk. If yours does, use the search or the lists instead. Ward statuses (taken or open) are
+  sample data.
 - Demo content: figures, prices, news and leaderboards are demo content, labelled "Demo data".
 - Photos of people: these are the photos supplied for review. Some must be licensed or replaced before the
   site goes public: one is an Adobe Stock preview with a watermark, and the photos of NYSC members and election
