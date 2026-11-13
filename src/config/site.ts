@@ -65,6 +65,13 @@ export const site = {
   hashtags: ["#WeWillNotStealYourMoney", "#VotePeopleWhoWillNotStealYourMoney"],
   hashtagAcronyms: ["#WWNSYM", "#VPWWNSYM"],
 
+  /**
+   * Public counters ("The movement, live", the ticker and the footer band) show a figure only once the real figure
+   * reaches this level. Below it, the site shows true momentum messages instead of a small number. Never replace
+   * the real figures with invented ones.
+   */
+  liveThresholds: { members: 1000, joinedToday: 50, raisedNaira: 1_000_000 },
+
   /** Launch of membership, website and Shop (PRD §20). */
   launchDate: "2026-11-09",
 } as const;

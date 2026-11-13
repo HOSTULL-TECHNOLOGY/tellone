@@ -1,4 +1,4 @@
-import { DEMO_MODE } from "@/config/site";
+import { DEMO_MODE, site } from "@/config/site";
 
 export type LiveStats = {
   members: number;
@@ -45,4 +45,14 @@ export async function getStats(): Promise<LiveStats | null> {
   if (DEMO_MODE) return demoStats();
   // Live source not connected yet: return null so the UI shows an honest pending state.
   return null;
+}
+
+/** Which counters are big enough to show publicly (see site.liveThresholds). Figures are always real or labelled demo. */
+export function visibleStats(s: LiveStats | null) {
+  const t = site.liveThresholds;
+  return {
+    members: !!s && s.members >= t.members,
+    today: !!s && s.joinedToday >= t.joinedToday,
+    raised: !!s && s.raisedNaira >= t.raisedNaira,
+  };
 }

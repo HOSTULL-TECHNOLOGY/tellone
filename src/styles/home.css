@@ -470,3 +470,10 @@
 /* Hero on white (the tagline bubble stays dark green) */
 .hero-white { background: #ffffff; border-bottom: 1px solid var(--line); }
 :root[data-theme="dark"] .hero-white { background: var(--paper); }
+
+/* "The movement, live" before the real counters reach site.liveThresholds: true momentum messages */
+.live-early { list-style: none; padding: 0; }
+.live-early li { display: grid; gap: 6px; padding: var(--s5); border-left: 4px solid var(--brand-green); background: var(--paper); border-radius: 0 var(--r-panel) var(--r-panel) 0; }
+.live-early strong { font-family: var(--font-display); font-size: clamp(1.6rem, 1.1rem + 1.4vw, 2.3rem); font-weight: 650; line-height: 1.1; }
+.live-early strong small { font-family: var(--font-text); font-size: var(--step-0); font-weight: 700; }
+.live-early a { font-weight: 800; text-decoration: underline; }

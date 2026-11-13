@@ -232,7 +232,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <section className="section band-red" aria-labelledby="live-h">
         <div className="container">
           <Head id="live-h" title={t.live.title} demo={<Demo t={t} />} />
-          <LiveBlock t={t} joinHref={L("/join")} transparencyHref={L("/transparency")} />
+          <LiveBlock t={t} joinHref={L("/join")} transparencyHref={L("/transparency")} wardsHref={L("/careers/ward-leaders#find-your-ward")} />
         </div>
       </section>
 

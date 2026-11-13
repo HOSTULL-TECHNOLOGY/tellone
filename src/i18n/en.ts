@@ -152,6 +152,15 @@ const en = {
     feedNote: "First name and state only, shown with each member’s permission.",
     joinedFrom: "from",
     refresh: "Updates every 60 seconds",
+    early: {
+      founding: "Be one of the first",
+      foundingText: "TBH One has just opened. Join now and you are a founding member: the people who started it in your street and your ward.",
+      wards: "wards need a leader",
+      wardsText: "One ward leader for every ward in Nigeria. It is free to apply, and you earn fees for the work you deliver.",
+      days: "days to Election Day",
+      daysText: "Every member who tells one, brings one and helps one moves the count. Start today.",
+      leader: "Find your ward",
+    },
   },
   projects: {
     title: "Fund a project you can track",
@@ -313,6 +322,7 @@ const en = {
     resources: "Resources",
     membersBand: "members",
     joinedToday: "joined today",
+    early: "Be one of TBH One’s founding members: join free today.",
     rights: "All Rights Reserved.",
     utility: "Quick links",
     legal: "Legal",

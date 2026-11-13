@@ -6,6 +6,7 @@ import { phaseAt, timeToElection, INEC_IREV_URL, type CampaignPhase } from "@/li
 import { DEMO_MODE } from "@/config/site";
 import { nextMilestone } from "@/data/timeline";
 import { useLiveStats } from "@/lib/useLiveStats";
+import { visibleStats } from "@/lib/stats";
 import type { Dict } from "@/i18n";
 
 /** Live election strip below the top bar (WEB-1). Switches to neutral info at the cut-off. */
@@ -48,7 +49,7 @@ export function Ticker({ t, electionHref, initialPhase }: { t: Dict; electionHre
         <span>
           <strong>{days ?? "—"}</strong> {t.ticker.toElection}
         </span>
-        {stats && (
+        {stats && visibleStats(stats).members && (
           <>
             <span aria-hidden="true" className="ticker-sep ticker-members">·</span>
             <span className="ticker-members">
