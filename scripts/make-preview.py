@@ -66,7 +66,7 @@ open(os.path.join(dst, "index.html"), "w", encoding="utf-8").write("""<!doctype 
 <meta http-equiv="refresh" content="0; url=pages/index.html">
 <style>
   body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #e9ebe2; color: #1b1a16;
-         font-family: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+         font-family: "Inter", "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   main { text-align: center; padding: 24px; }
   img { width: 180px; height: auto; }
   a { color: #0f4d02; font-weight: 700; }

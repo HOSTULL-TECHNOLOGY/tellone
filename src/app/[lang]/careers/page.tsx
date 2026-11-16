@@ -1,5 +1,6 @@
 import "@/styles/participate.css";
 import "@/styles/careers.css";
+import { CPhoto } from "@/components/careers/WardLeaderInfo";
 import Link from "next/link";
 import { Briefcase, Globe2, MapPin, PenTool } from "lucide-react";
 import { localeParams } from "@/lib/meta";
@@ -24,6 +25,7 @@ export default async function CareersHub({ params }: { params: Promise<{ lang: s
   return (
     <>
       <PageHeader
+        aside={<CPhoto name="01-market-trader-vegetables" className="cw-head-photo" eager />}
         locale={locale}
         crumbs={[{ label: "Opportunities" }, { label: "Careers" }]}
         title="TBH One Careers"

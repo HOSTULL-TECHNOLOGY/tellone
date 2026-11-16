@@ -559,8 +559,9 @@ export const flow = {
   pledges: [
     "I have read and will follow the Code of Conduct",
     "I understand TBH One will never ask me to pay for this role",
-    "I understand this is a TBH One organising role, not a government office",
   ],
+  /** Shown as an optional tick box after the required pledges. */
+  pledgeSupport: "(Optional) I understand that TBH One is a support group, not working directly for the NDC, and that it is not a government organisation",
   pledgeOptional: "(Optional) I agree TBH One may check that I follow its official accounts to give me Vision Points; I can withdraw this anytime",
 };
 

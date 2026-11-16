@@ -99,10 +99,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <WardCounter variant="band" />
             </div>
             <div className="cw-homeband-ctas">
-              <Link href={L("/careers/ward-leaders#find-your-ward")} className="btn btn-lg cw-btn-primary">
-                Find your ward
-              </Link>
-              <Link href={L("/careers/ward-leaders/apply")} className="btn btn-lg btn-outline">
+              <Link href={L("/careers/ward-leaders/apply")} className="btn btn-lg cw-btn-primary">
                 Apply
               </Link>
             </div>

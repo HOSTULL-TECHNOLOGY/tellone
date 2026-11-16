@@ -290,7 +290,7 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
   const [existing, setExisting] = useState<Application | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<Record<string, string>>({});
-  const [f, setF] = useState({ live: false, years: "", streets: "", dob: "", occupation: "", languages: "", device: "Android", groups: [] as string[], groupYears: "", helped: "", hours: "", pledges: [false, false, false], socialConsent: false });
+  const [f, setF] = useState({ live: false, years: "", streets: "", dob: "", occupation: "", languages: "", device: "Android", groups: [] as string[], groupYears: "", helped: "", hours: "", pledges: [false, false], supportAck: false, socialConsent: false });
   useEffect(() => {
     const mine = readApplications().find((a) => a.userId === user.id);
     if (mine) setExisting(mine);
@@ -301,7 +301,12 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
   useEffect(() => {
     try {
       const d = readPref(draftKey);
-      if (d) setF((x) => ({ ...x, ...JSON.parse(d) }));
+      if (d) {
+        const saved = JSON.parse(d);
+        // Drafts from before the pledge change had three required pledges; keep the two that still apply
+        if (Array.isArray(saved.pledges)) saved.pledges = saved.pledges.slice(0, 2);
+        setF((x) => ({ ...x, ...saved }));
+      }
     } catch {}
   }, [draftKey]);
   useEffect(() => {
@@ -365,9 +370,8 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
         const a = age(f.dob);
         if (a < 0) x.dob = "Enter your date of birth.";
         else if (a < 18) x.dob = edges.under18;
-        if (f.helped.trim().split(/\s+/).length < 6) x.helped = "In two sentences, tell us how you have helped your community.";
         if (!f.hours) x.hours = "Choose how many hours a day you can give.";
-        if (f.pledges.some((p) => !p)) x.pledges = "Tick all three pledges to apply.";
+        if (f.pledges.some((p) => !p)) x.pledges = "Tick both required pledges to apply.";
         setErr(x);
         if (Object.keys(x).length) {
           document.querySelector(".field-error")?.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -458,7 +462,7 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
           ))}
         </div>
         <TextField label="Years in that role" type="number" min={0} value={f.groupYears} onChange={(e) => set("groupYears", e.target.value)} />
-        <TextArea label="In two sentences, how have you helped your community?" rows={3} value={f.helped} onChange={(e) => set("helped", e.target.value)} error={err.helped} required />
+        <TextArea label="In two sentences, how have you helped your community? (optional)" rows={3} value={f.helped} onChange={(e) => set("helped", e.target.value)} />
       </fieldset>
 
       <fieldset className="ap-sec">
@@ -476,7 +480,7 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
         </div>
         {err.hours && <p className="field-error">{err.hours}</p>}
         <p className="small muted">
-          Optional: your usernames on our 11 platforms earn Vision Points. <Link href={hrefs.boost}>Open the Boost panel</Link> (your current score: {visionTotals(readVision(user.id)).verified} / 100).
+          Your Vision Meter: {visionTotals(readVision(user.id)).verified} / 100 from the Follow us step. You can earn more on the last page, after you apply.
         </p>
       </fieldset>
 
@@ -490,6 +494,7 @@ function Application({ user, ward, setWard, wardMissing, hrefs }: { user: DemoUs
             onChange={(e) => set("pledges", f.pledges.map((x, j) => (j === i ? e.target.checked : x)))}
           />
         ))}
+        <CheckField label={flow.pledgeSupport} checked={f.supportAck} onChange={(e) => set("supportAck", e.target.checked)} />
         <CheckField label={flow.pledgeOptional} checked={f.socialConsent} onChange={(e) => set("socialConsent", e.target.checked)} />
         {err.pledges && <p className="field-error">{err.pledges}</p>}
       </fieldset>

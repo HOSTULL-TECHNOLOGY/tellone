@@ -32,7 +32,9 @@ WHAT IS INSIDE
                  media/   campaign posters
                  shop/    product photos
                  audio/   the 7 theme songs, each in normal (128 kbps) and Data Saver (48 kbps) quality
-                 fonts/   Noto Serif Display and Noto Sans (SIL Open Font License)
+                 fonts/   brand fonts: Inter (stands in for SF Pro Display and BL Melody) and Gilda Display,
+                          plus Noto for any missing letters (all SIL Open Font License). SF Pro Display shows
+                          on Apple devices, which have it built in; BL Melody needs licensed web files
 
 
 THINGS TO TRY

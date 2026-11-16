@@ -63,11 +63,11 @@ await check("index.html opens the homepage (light theme, hero, no sideways scrol
   return `${here(page)}: "${h1}"`;
 });
 
-await check("Fonts: Noto Serif Display and Noto Sans load from the package", async (page) => {
+await check("Fonts: Inter (SF Pro Display / BL Melody fallback) and Gilda Display load from the package", async (page) => {
   await page.goto(root + "pages/index.html");
   await page.evaluate(() => document.fonts.ready);
   const fonts = await page.evaluate(() => [...document.fonts].filter((f) => f.status === "loaded").map((f) => f.family));
-  const want = ["Noto Serif Display", "Noto Sans"];
+  const want = ["Inter", "Gilda Display"];
   for (const w of want) if (!fonts.some((f) => f.replace(/"/g, "") === w)) throw new Error(`missing ${w}; loaded: ${[...new Set(fonts)]}`);
   return [...new Set(fonts.map((f) => f.replace(/"/g, "")))].join(", ");
 });

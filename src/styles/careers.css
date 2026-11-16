@@ -429,3 +429,53 @@
 }
 @media (max-width: 479px) { .ch-role { grid-template-columns: auto minmax(0, 1fr); } .ch-role > .btn { grid-column: 1 / -1; } }
 .ch-role .chip { white-space: normal; max-width: 100%; }
+/* Group / hours chips: the label text never gets its own box (a shared span rule gave it a white pill) */
+.ap-chip > span { background: none !important; border: 0 !important; padding: 0 !important; box-shadow: none !important; color: inherit !important; min-height: 0 !important; }
+.cw-hero-grid > * { min-width: 0; }
+.cw-hero h1 { overflow-wrap: anywhere; hyphens: auto; }
+
+/* ==================================================================== Careers: people photos */
+.cw-photo { display: block; overflow: hidden; border-radius: 18px; background: var(--surface-sunk); }
+.cw-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cw-photo-wide { aspect-ratio: 16 / 9; margin: var(--s3) 0 var(--s4); }
+.cw-head-photo { aspect-ratio: 4 / 3; border-radius: 14px; }
+.page-aside .cw-head-photo { margin: calc(var(--s4) * -1); width: calc(100% + var(--s4) * 2); border-radius: 18px; }
+/* Hero: a row of faces */
+.cw-faces { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); margin-top: var(--s4); }
+.cw-faces-row { display: flex; }
+.cw-faces-row .cw-photo { width: 52px; height: 52px; border-radius: 50%; border: 3px solid #ffffff; box-shadow: 0 4px 10px -4px rgb(0 0 0 / 0.4); }
+.cw-faces-row .cw-photo + .cw-photo { margin-left: -14px; }
+.cw-faces p { flex: 1 1 200px; font-weight: 700; color: var(--brand-green-deep); font-size: 0.9375rem; }
+/* Why: the quote sits on a photo */
+.cw-quote-photo { position: relative; padding: 0; border-radius: 20px; overflow: hidden; min-height: 360px; display: grid; }
+.cw-quote-photo .cw-photo { position: absolute; inset: 0; border-radius: 0; }
+.cw-quote-over { position: relative; align-self: end; margin: var(--s4); padding: var(--s5); border-radius: 16px; background: rgb(15 77 2 / 0.92); }
+/* Benefits: photo on top of each card */
+.cw-benefits li { padding: 0 0 var(--s5); overflow: hidden; }
+.cw-benefits li > :not(.cw-benefit-photo) { margin-inline: var(--s5); }
+.cw-benefit-photo { aspect-ratio: 3 / 2; border-radius: 0; margin-bottom: var(--s2); }
+.cw-benefit-icon { display: grid; place-items: center; width: 48px; height: 48px; margin-top: -40px !important; position: relative; border-radius: 50%; background: #ffffff; box-shadow: 0 6px 14px -6px rgb(0 0 0 / 0.4); font-size: 1.5rem; }
+/* Duties: photo beside the list */
+.cw-duties-wrap { display: grid; gap: var(--s5); }
+.cw-duties-photo { aspect-ratio: 4 / 3; }
+@media (min-width: 1000px) {
+  .cw-duties-wrap { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); align-items: start; }
+  .cw-duties-photo { position: sticky; top: calc(var(--topbar-h, 49px) + var(--header-h) + 24px); aspect-ratio: 3 / 4; }
+  .cw-duties-wrap .cw-duties { grid-template-columns: 1fr 1fr; }
+}
+.cw-side-photo { display: grid; gap: var(--s3); }
+.cw-side-photo .cw-photo { aspect-ratio: 16 / 9; }
+.cw-side-photo .cw-why { margin-top: 0; }
+.cw-box-photo { aspect-ratio: 16 / 9; margin: calc(var(--s5) * -1) calc(var(--s5) * -1) var(--s4); border-radius: 18px 18px 0 0; }
+.cw-photo-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s3); margin-bottom: var(--s5); }
+.cw-photo-strip .cw-photo { aspect-ratio: 3 / 4; }
+@media (max-width: 699px) { .cw-photo-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cw-quote-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); }
+.cw-avatar { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #d40000; color: #ffffff; font-weight: 800; font-size: 1.125rem; }
+.band-green .cw-avatar { background: #ffffff; color: #0f4d02; }
+/* Final call to action on a photo */
+.cw-final-photo { position: relative; isolation: isolate; overflow: hidden; }
+.cw-final-bg { position: absolute; inset: 0; z-index: -1; border-radius: 0; }
+.cw-final-bg img { opacity: 0.28; filter: grayscale(0.2); }
+.cw-support li { display: grid; gap: 4px; font-weight: 400; }
+.cw-support li strong { font-weight: 800; color: var(--brand-green-deep); }
