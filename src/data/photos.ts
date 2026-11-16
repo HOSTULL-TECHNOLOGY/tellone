@@ -99,3 +99,15 @@ export const electionPhoto: PeoplePhoto = {
   ratio: 1.777,
   rights: "Shows electoral officials: avoid any suggestion that INEC staff support a party. Source unknown: confirm licence before launch.",
 };
+
+/**
+ * Careers pages (ward leaders): photos supplied by the client on 16 Nov 2026 for the careers pages only.
+ * Before launch, confirm they are real photos the campaign owns, with consent from everyone identifiable.
+ */
+export const careersPhotos: PeoplePhoto[] = [
+  { base: "/photos/20-careers-poster-provision-shop", alt: "A young man in a blue NDC T-shirt putting up a “We no go thief your money” poster on a provision shop door while the smiling shop owner holds the door", ratio: 1.339 },
+  { base: "/photos/21-careers-poster-hair-salon", alt: "A young man in a blue NDC T-shirt and a smiling salon owner in an apron putting up a campaign poster on the glass door of a hair salon", ratio: 1.339 },
+  { base: "/photos/22-careers-team-village-walk", alt: "Six smiling young volunteers walking through a village street with posters, a paste bucket and a brush, one holding up a “We no go thief your money” poster", ratio: 1.793 },
+  { base: "/photos/23-careers-village-meeting", alt: "A young man in a blue T-shirt speaking from a wooden lectern to elders and young men seated on benches at an outdoor village meeting", ratio: 1.793 },
+  { base: "/photos/24-careers-poster-roadside-salon", alt: "A young man in a blue campaign T-shirt and a woman in an Ankara apron putting up a campaign poster on the door of a roadside salon", ratio: 1.339 },
+];

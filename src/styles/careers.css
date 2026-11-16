@@ -479,3 +479,8 @@
 .cw-final-bg img { opacity: 0.28; filter: grayscale(0.2); }
 .cw-support li { display: grid; gap: 4px; font-weight: 400; }
 .cw-support li strong { font-weight: 800; color: var(--brand-green-deep); }
+.cw-hero-photo { aspect-ratio: 16 / 9; margin-top: var(--s4); }
+/* Client careers photos: keep faces in frame when cropped */
+.cw-duties-photo img, .cw-photo-strip .cw-photo img { object-position: 50% 35%; }
+.cw-benefits li:nth-child(6) .cw-benefit-photo img { object-position: 85% 50%; }
+.cw-benefits li:nth-child(3) .cw-benefit-photo img { object-position: 30% 50%; }

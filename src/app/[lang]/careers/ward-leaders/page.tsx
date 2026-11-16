@@ -95,14 +95,7 @@ export default async function WardLeadersCareersPage({ params }: { params: Promi
               <div className="cw-counter-box band-green">
                 <WardCounter />
               </div>
-              <div className="cw-faces">
-                <div className="cw-faces-row" aria-hidden>
-                  {["01-market-trader-vegetables", "06-man-agbada-portrait", "09-teacher-whiteboard", "03-young-professional", "02-fabric-trader-shop"].map((n) => (
-                    <CPhoto key={n} name={n} sizes="64px" eager />
-                  ))}
-                </div>
-                <p>Traders, teachers, artisans, farmers and youth leaders: the people your neighbours already trust.</p>
-              </div>
+              <CPhoto name="22-careers-team-village-walk" className="cw-hero-photo" sizes="(min-width: 1050px) 620px, 100vw" eager />
               <p className="cw-trust">
                 <ShieldCheck size={18} aria-hidden /> {t.trust}
               </p>

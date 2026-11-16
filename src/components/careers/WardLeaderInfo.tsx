@@ -4,7 +4,7 @@ import { href, type Locale } from "@/lib/i18n";
 import { site } from "@/config/site";
 import { Faq } from "@/components/ui/Page";
 import { ExampleMonths, RegionChart, ShareRow } from "@/components/careers/Recruitment";
-import { peoplePhotos } from "@/data/photos";
+import { careersPhotos, peoplePhotos } from "@/data/photos";
 import {
   benefits,
   boost,
@@ -44,26 +44,26 @@ import {
 const dutyIcons = [Users, ClipboardCheck, CalendarDays, HandCoins, Megaphone, ShieldAlert];
 
 /**
- * Photos of people across the careers sections. These are the client's people photos (src/data/photos.ts); swap a
+ * Photos across the careers sections: the client's careers photos (careersPhotos in src/data/photos.ts); swap a
  * name here to use a different photo. Photos never sit next to a quote, so no one is shown as saying something.
  * Not used here: NYSC corps members and election officials (both must stay out of partisan politics) and children.
  */
 const PH = {
-  why: "01-market-trader-vegetables",
-  benefits: ["10-market-trader-snacks", "09-teacher-whiteboard", "02-fabric-trader-shop", "06-man-agbada-portrait", "03-young-professional", "07-elder-village-road"],
-  duties: "10-market-trader-snacks",
-  paid: "02-fabric-trader-shop",
-  week: "09-teacher-whiteboard",
-  member: "10-market-trader-snacks",
-  register: "03-young-professional",
-  ward: "07-elder-village-road",
-  who: ["01-market-trader-vegetables", "06-man-agbada-portrait", "02-fabric-trader-shop", "03-young-professional"],
-  final: "01-market-trader-vegetables",
+  why: "23-careers-village-meeting",
+  benefits: ["20-careers-poster-provision-shop", "23-careers-village-meeting", "22-careers-team-village-walk", "21-careers-poster-hair-salon", "24-careers-poster-roadside-salon", "22-careers-team-village-walk"],
+  duties: "23-careers-village-meeting",
+  paid: "20-careers-poster-provision-shop",
+  week: "21-careers-poster-hair-salon",
+  member: "24-careers-poster-roadside-salon",
+  register: "22-careers-team-village-walk",
+  ward: "24-careers-poster-roadside-salon",
+  who: ["20-careers-poster-provision-shop", "21-careers-poster-hair-salon", "24-careers-poster-roadside-salon", "23-careers-village-meeting"],
+  final: "22-careers-team-village-walk",
 };
 
 /** A responsive photo from public/photos (480/960 WebP with a JPEG fallback). */
 export function CPhoto({ name, className = "", sizes = "(min-width: 900px) 560px, 100vw", eager }: { name: string; className?: string; sizes?: string; eager?: boolean }) {
-  const p = peoplePhotos.find((x) => x.base.endsWith(name));
+  const p = [...careersPhotos, ...peoplePhotos].find((x) => x.base.endsWith(name));
   if (!p) return null;
   return (
     <picture className={`cw-photo ${className}`}>

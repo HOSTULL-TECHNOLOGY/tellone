@@ -24,7 +24,7 @@ export default async function ApplyPage({ params }: { params: Promise<{ lang: st
   return (
     <>
       <PageHeader
-        aside={<CPhoto name="06-man-agbada-portrait" className="cw-head-photo" eager />}
+        aside={<CPhoto name="22-careers-team-village-walk" className="cw-head-photo" eager />}
         locale={locale}
         crumbs={[{ label: "Careers", path: "/careers" }, { label: "Ward Leaders", path: "/careers/ward-leaders" }, { label: "Apply" }]}
         title="Apply to be a ward leader"
